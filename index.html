@@ -216,8 +216,8 @@
 
   <!-- Step1 -->
   <div class="card" id="step1">
-    <h1 id="step1-text" data-text="Hey there,"></h1>
-    <p id="step1-para" data-text="will you be my Valentine? ❤️"></p>
+    <p id="step1-para" data-text="Hey There!"></p>
+    <h1 id="step1-text" data-text="Will you be my Valentine?"></h1>
     <button class="btn" id="btnStart">Yes ✨</button>
     <button class="btn" id="btnStart">No, Thank you!</button>
   </div>
@@ -305,7 +305,7 @@ openBtn.addEventListener('click', async()=>{
   openBtn.style.display='none';
   document.getElementById('step1').style.display='block';
   bgMusic.play().catch(e=>console.log("Autoplay blocked:",e));
-  await typeWriterPromise('step1-text',80);
+  await typeWriterPromise('step1-text',60);
   await typeWriterPromise('step1-para',50);
 });
 
@@ -337,12 +337,11 @@ async function showStep3WithSlideshowOverlay(){
   slideshowOverlay.style.display='flex';
 
   const images=[
-    'IMAGES/3.jpeg','IMAGES/4.jpg','IMAGES/5.jpeg','IMAGES/6.jpeg',
-    'IMAGES/7.jpg','IMAGES/8.jpg','IMAGES/9.jpeg','IMAGES/10.jpeg',
-    'IMAGES/11.jpeg','IMAGES/12.jpeg','IMAGES/13.jpeg','IMAGES/14.jpeg',
-    'IMAGES/15.jpeg','IMAGES/16.jpeg','IMAGES/17.jpeg','IMAGES/18.jpeg',
-    'IMAGES/19.jpeg','IMAGES/20.jpeg','IMAGES/21.jpg','IMAGES/22.jpeg',
-    'IMAGES/23.jpg','IMAGES/24.jpeg'
+    'IMAGES/3.jpg','IMAGES/4.jpg','IMAGES/5.jpg','IMAGES/6.jpg',
+    'IMAGES/7.jpg','IMAGES/8.jpg','IMAGES/9.jpg','IMAGES/10.jpg',
+    'IMAGES/11.jpg','IMAGES/12.jpg','IMAGES/13.jpg','IMAGES/14.jpg',
+    'IMAGES/15.jpg','IMAGES/16.jpg','IMAGES/17.jpg','IMAGES/18.jpg',
+    'IMAGES/19.jpg','IMAGES/20.jpg','IMAGES/21.jpg'
   ];
 
   // preload images
