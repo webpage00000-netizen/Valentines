@@ -305,8 +305,8 @@ openBtn.addEventListener('click', async()=>{
   openBtn.style.display='none';
   document.getElementById('step1').style.display='block';
   bgMusic.play().catch(e=>console.log("Autoplay blocked:",e));
-  await typeWriterPromise('step1-text',60);
-  await typeWriterPromise('step1-para',50);
+  await typeWriterPromise('step1-text',50);
+  await typeWriterPromise('step1-para',80);
 });
 
 document.getElementById('btnStart').addEventListener('click',showMonthsary);
