@@ -17,7 +17,7 @@
     margin: 0;
     padding: 20px;
     color: #333;
-    overflow: hidden;
+    overflow-x: hidden;
   }
 
   .container {
@@ -25,6 +25,8 @@
     flex-direction: column;
     align-items: center;
     transition: all 1.5s ease;
+    width: 100%;
+    max-width: 450px;
   }
 
   h1 {
@@ -38,20 +40,22 @@
 
   .input-boxes {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     margin-bottom: 15px;
-    transition: all 1.5s ease;
+    justify-content: center;
   }
 
   .box {
-    width: 60px;
+    flex: 1;
+    max-width: 60px;
     height: 60px;
+    min-width: 50px;
     border: 3px solid #d60000;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
+    font-size: 24px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     transition: transform 0.2s, background-color 0.2s;
     background-color: #fff;
@@ -62,8 +66,9 @@
   .keyboard {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     transition: opacity 1.5s ease;
+    width: 100%;
   }
 
   .keyboard.hidden {
@@ -74,13 +79,16 @@
   .row {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
+    flex-wrap: wrap;
   }
 
   .key {
-    width: 55px;
-    height: 55px;
-    border-radius: 12px;
+    flex: 1 1 calc(10% - 6px);
+    max-width: 50px;
+    min-width: 40px;
+    height: 50px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -90,7 +98,7 @@
     user-select: none;
     transition: all 0.2s;
     cursor: not-allowed;
-    font-size: 18px;
+    font-size: 16px;
     box-shadow: 0 3px 5px rgba(0,0,0,0.2);
   }
 
@@ -114,7 +122,7 @@
 
   #message {
     margin-top: 10px;
-    font-size: 22px;
+    font-size: 20px;
     color: #d60000;
     text-align: center;
     font-weight: 600;
@@ -122,14 +130,14 @@
 
   #shortMessage {
     margin-top: 10px;
-    font-size: 18px;
+    font-size: 16px;
     color: #333;
     text-align: center;
     display: none;
   }
 
   #loading {
-    font-size: 20px;
+    font-size: 18px;
     margin-top: 10px;
     display: none;
     text-align: center;
@@ -149,7 +157,7 @@
 
   #proceedBtn {
     margin-top: 20px;
-    padding: 10px 25px;
+    padding: 10px 20px;
     font-size: 18px;
     background-color: #d60000;
     color: white;
@@ -165,6 +173,37 @@
     transform: scale(1.05);
   }
 
+  /* Mobile adjustments */
+  @media (max-width: 400px){
+    h1 {
+      font-size: 1.6em;
+    }
+
+    .box {
+      font-size: 20px;
+      max-width: 50px;
+      height: 50px;
+    }
+
+    .key {
+      font-size: 14px;
+      max-width: 45px;
+      height: 45px;
+    }
+
+    #shortMessage {
+      font-size: 14px;
+    }
+
+    #loading {
+      font-size: 16px;
+    }
+
+    #proceedBtn {
+      font-size: 16px;
+      padding: 8px 18px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -291,9 +330,6 @@
     if(input.length === 3 && input.map(x=>x.letter).join('') === "YES"){
       // Fade out keyboard
       keyboardDiv.classList.add('hidden');
-
-      // Animate container upward
-      mainContainer.style.marginTop = "0px";
 
       // Show short message and loading
       shortMessage.style.display = "block";
