@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine Keyboard</title>
+<title>Valentine Surprise</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   body {
@@ -12,12 +12,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    padding: 20px;
     min-height: 100vh;
     margin: 0;
-    padding: 20px;
-    color: #333;
-    overflow-x: hidden;
   }
 
   .container {
@@ -32,10 +29,9 @@
   h1 {
     font-family: 'Fredoka One', cursive;
     color: #d60000;
-    text-align: center;
     font-size: 2em;
-    margin-bottom: 15px;
-    text-shadow: 1px 1px 2px #fff;
+    text-align: center;
+    margin-bottom: 20px;
   }
 
   .input-boxes {
@@ -80,13 +76,12 @@
     display: flex;
     justify-content: center;
     gap: 5px;
-    flex-wrap: nowrap; /* prevent wrapping */
+    flex-wrap: nowrap;
   }
 
-  /* Row-specific key widths */
-  #row1 .key { flex: 0 0 calc((100% - 9*5px)/10); } /* 10 keys Q-P */
-  #row2 .key { flex: 0 0 calc((100% - 8*5px)/9); }  /* 9 keys A-L */
-  #row3 .key { flex: 0 0 calc((100% - 8*5px)/9); }  /* 9 keys - Z-M, Del */
+  #row1 .key { flex: 0 0 calc((100% - 9*5px)/10); }
+  #row2 .key { flex: 0 0 calc((100% - 8*5px)/9); }
+  #row3 .key { flex: 0 0 calc((100% - 8*5px)/9); }
 
   .key {
     height: 50px;
@@ -104,85 +99,37 @@
     box-shadow: 0 3px 5px rgba(0,0,0,0.2);
   }
 
-  .key.highlight {
-    background-color: #d60000;
-    cursor: pointer;
-  }
+  .key.highlight { background-color: #d60000; cursor: pointer; }
+  .key.highlight:hover { transform: scale(1.2); }
+  .key.special { background-color: #ff6600; cursor: pointer; }
+  .key.special:hover { transform: scale(1.1); }
 
-  .key.highlight:hover {
-    transform: scale(1.2);
-  }
-
-  .key.special {
-    background-color: #ff6600;
-    cursor: pointer;
-  }
-
-  .key.special:hover {
-    transform: scale(1.1);
-  }
-
-  #message {
-    margin-top: 10px;
-    font-size: 20px;
-    color: #d60000;
-    text-align: center;
-    font-weight: 600;
-  }
-
-  #shortMessage {
-    margin-top: 10px;
-    font-size: 16px;
-    color: #333;
-    text-align: center;
-    display: none;
-  }
-
-  #loading {
-    font-size: 18px;
-    margin-top: 10px;
-    display: none;
-    text-align: center;
-  }
-
-  .dot {
-    animation: blink 1s infinite;
-  }
-
+  #message { margin-top: 10px; font-size: 20px; color: #d60000; text-align: center; font-weight: 600; }
+  #shortMessage { margin-top: 10px; font-size: 16px; color: #333; text-align: center; display: none; }
+  #loading { font-size: 18px; margin-top: 10px; display: none; text-align: center; }
+  .dot { animation: blink 1s infinite; }
   .dot:nth-child(2) { animation-delay: 0.2s; }
   .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink { 0%,50%,100%{opacity:0;} 25%,75%{opacity:1;} }
 
-  @keyframes blink {
-    0%, 50%, 100% { opacity: 0; }
-    25%, 75% { opacity: 1; }
-  }
+  #proceedBtn { margin-top: 20px; padding: 10px 20px; font-size: 18px; background-color: #d60000; color: white; border: none; border-radius: 10px; cursor: pointer; display: none; transition: transform 0.2s, background-color 0.2s; }
+  #proceedBtn:hover { background-color: #ff1a1a; transform: scale(1.05); }
 
-  #proceedBtn {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 18px;
-    background-color: #d60000;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    display: none;
-    transition: transform 0.2s, background-color 0.2s;
-  }
+  /* Puzzle styles */
+  #puzzleContainer { display: none; flex-direction: column; align-items: center; }
+  #puzzle { display: grid; grid-template-columns: repeat(3, 100px); grid-template-rows: repeat(3, 100px); gap: 5px; margin-bottom: 20px; }
+  .tile { width: 100px; height: 100px; background-size: 300px 300px; cursor: grab; border-radius: 8px; transition: transform 0.2s; }
+  .tile.dragging { opacity: 0.6; transform: scale(1.05); }
+  #puzzleMessage { font-size: 20px; color: #d60000; font-weight: bold; text-align: center; display: none; }
 
-  #proceedBtn:hover {
-    background-color: #ff1a1a;
-    transform: scale(1.05);
-  }
-
-  /* Mobile adjustments */
   @media (max-width: 400px){
-    h1 { font-size: 1.6em; }
     .box { font-size: 20px; max-width: 50px; height: 50px; }
     .key { font-size: 14px; height: 45px; }
     #shortMessage { font-size: 14px; }
     #loading { font-size: 16px; }
     #proceedBtn { font-size: 16px; padding: 8px 18px; }
+    #puzzle { grid-template-columns: repeat(3, 90px); grid-template-rows: repeat(3, 90px); gap: 4px; }
+    .tile { width: 90px; height: 90px; background-size: 270px 270px; }
   }
 </style>
 </head>
@@ -209,130 +156,189 @@
   <button id="proceedBtn">Proceed</button>
 </div>
 
-<audio id="crySound">
-  <source src="https://www.soundjay.com/human/sounds/cry-01.mp3" type="audio/mpeg">
-</audio>
+<!-- Puzzle Section -->
+<div id="puzzleContainer">
+  <h1>Complete the Puzzle!</h1>
+  <div id="puzzle"></div>
+  <div id="puzzleMessage">🎉 Congrats! Here's your hidden message! 🎉</div>
+</div>
 
 <script>
-  const rows = {
-    row1: ['Q','W','E','R','T','Y','U','I','O','P'],
-    row2: ['A','S','D','F','G','H','J','K','L'],
-    row3: ['-','Z','X','C','V','B','N','M','Del']
-  };
+/* Keyboard & Countdown */
+const rows = {
+  row1: ['Q','W','E','R','T','Y','U','I','O','P'],
+  row2: ['A','S','D','F','G','H','J','K','L'],
+  row3: ['-','Z','X','C','V','B','N','M','Del']
+};
 
-  const clickable = ['Y','E','S'];
-  const special = ['N','O'];
+const clickable = ['Y','E','S'];
+const special = ['N','O'];
+const boxes = [document.getElementById('box1'), document.getElementById('box2'), document.getElementById('box3')];
+const message = document.getElementById('message');
+const keyboardDiv = document.getElementById('keyboard');
+const mainContainer = document.getElementById('mainContainer');
+const shortMessage = document.getElementById('shortMessage');
+const loading = document.getElementById('loading');
+const countdownEl = document.getElementById('countdown');
+const proceedBtn = document.getElementById('proceedBtn');
 
-  const boxes = [document.getElementById('box1'), document.getElementById('box2'), document.getElementById('box3')];
-  const message = document.getElementById('message');
-  const crySound = document.getElementById('crySound');
-  const keyboardDiv = document.getElementById('keyboard');
-  const mainContainer = document.getElementById('mainContainer');
-  const shortMessage = document.getElementById('shortMessage');
-  const loading = document.getElementById('loading');
-  const countdownEl = document.getElementById('countdown');
-  const proceedBtn = document.getElementById('proceedBtn');
+let input = [];
+let specialPressed = { N:false, O:false };
 
-  let input = [];
-  let specialPressed = { N:false, O:false };
+function createRow(rowId, letters) {
+  const rowDiv = document.getElementById(rowId);
+  letters.forEach(letter => {
+    const key = document.createElement('div');
+    key.classList.add('key');
+    key.textContent = letter;
 
-  function createRow(rowId, letters) {
-    const rowDiv = document.getElementById(rowId);
-    letters.forEach(letter => {
-      const key = document.createElement('div');
-      key.classList.add('key');
-      key.textContent = letter;
-
-      if(clickable.includes(letter)){
-        key.classList.add('highlight');
-        key.addEventListener('click', () => handleInput(letter, '#d60000'));
-      } else if(special.includes(letter)){
-        key.classList.add('special');
-        key.addEventListener('click', () => handleSpecial(letter, '#ff6600'));
-      } else if(letter === 'Del'){
-        key.classList.add('special');
-        key.addEventListener('click', deleteInput);
-      }
-
-      rowDiv.appendChild(key);
-    });
-  }
-
-  function handleInput(letter, color){
-    if(input.length < 3){
-      input.push({letter, color});
-      updateBoxes();
-      checkInput();
+    if(clickable.includes(letter)){
+      key.classList.add('highlight');
+      key.addEventListener('click', () => handleInput(letter, '#d60000'));
+    } else if(special.includes(letter)){
+      key.classList.add('special');
+      key.addEventListener('click', () => handleSpecial(letter, '#ff6600'));
+    } else if(letter === 'Del'){
+      key.classList.add('special');
+      key.addEventListener('click', deleteInput);
     }
-  }
 
-  function handleSpecial(letter, color){
-    if(input.length < 3){
-      input.push({letter, color});
-      updateBoxes();
-      specialPressed[letter] = true;
-
-      if(letter === 'O'){
-        crySound.currentTime = 0;
-        crySound.play();
-      }
-
-      if(specialPressed['N'] && specialPressed['O']){
-        message.textContent = "PLEASE!! 🙏";
-      }
-    }
-  }
-
-  function deleteInput(){
-    if(input.length > 0){
-      const removed = input.pop();
-      updateBoxes();
-      if(special.includes(removed.letter)){
-        specialPressed[removed.letter] = false;
-      }
-      message.textContent = "";
-    }
-  }
-
-  function updateBoxes(){
-    for(let i=0;i<3;i++){
-      if(input[i]){
-        boxes[i].textContent = input[i].letter;
-        boxes[i].style.backgroundColor = input[i].color;
-      } else {
-        boxes[i].textContent = '';
-        boxes[i].style.backgroundColor = '#fff';
-      }
-    }
-  }
-
-  function checkInput(){
-    if(input.length === 3 && input.map(x=>x.letter).join('') === "YES"){
-      keyboardDiv.classList.add('hidden');
-      shortMessage.style.display = "block";
-      loading.style.display = "block";
-
-      let countdown = 8;
-      countdownEl.textContent = countdown;
-
-      const interval = setInterval(() => {
-        countdown--;
-        countdownEl.textContent = countdown;
-        if(countdown <= 0){
-          clearInterval(interval);
-          proceedBtn.style.display = "block";
-        }
-      }, 1000);
-    }
-  }
-
-  createRow('row1', rows.row1);
-  createRow('row2', rows.row2);
-  createRow('row3', rows.row3);
-
-  proceedBtn.addEventListener('click', () => {
-    alert("Proceeding...");
+    rowDiv.appendChild(key);
   });
+}
+
+function handleInput(letter, color){
+  if(input.length < 3){
+    input.push({letter, color});
+    updateBoxes();
+    checkInput();
+  }
+}
+
+function handleSpecial(letter, color){
+  if(input.length < 3){
+    input.push({letter, color});
+    updateBoxes();
+    specialPressed[letter] = true;
+    if(letter === 'O'){ /* crying sound could be added */ }
+    if(specialPressed['N'] && specialPressed['O']){
+      message.textContent = "PLEASE!! 🙏";
+    }
+  }
+}
+
+function deleteInput(){
+  if(input.length > 0){
+    const removed = input.pop();
+    updateBoxes();
+    if(special.includes(removed.letter)){
+      specialPressed[removed.letter] = false;
+    }
+    message.textContent = "";
+  }
+}
+
+function updateBoxes(){
+  for(let i=0;i<3;i++){
+    if(input[i]){
+      boxes[i].textContent = input[i].letter;
+      boxes[i].style.backgroundColor = input[i].color;
+    } else {
+      boxes[i].textContent = '';
+      boxes[i].style.backgroundColor = '#fff';
+    }
+  }
+}
+
+function checkInput(){
+  if(input.length === 3 && input.map(x=>x.letter).join('') === "YES"){
+    keyboardDiv.classList.add('hidden');
+    shortMessage.style.display = "block";
+    loading.style.display = "block";
+
+    let countdown = 8;
+    countdownEl.textContent = countdown;
+
+    const interval = setInterval(() => {
+      countdown--;
+      countdownEl.textContent = countdown;
+      if(countdown <= 0){
+        clearInterval(interval);
+        proceedBtn.style.display = "block";
+      }
+    }, 1000);
+  }
+}
+
+createRow('row1', rows.row1);
+createRow('row2', rows.row2);
+createRow('row3', rows.row3);
+
+proceedBtn.addEventListener('click', () => {
+  mainContainer.style.display = 'none'; // hide keyboard/inputs
+  document.getElementById('puzzleContainer').style.display = 'flex'; // show puzzle
+  initPuzzle();
+});
+
+/* Puzzle Logic */
+const puzzle = document.getElementById('puzzle');
+const puzzleMessage = document.getElementById('puzzleMessage');
+const gridSize = 3;
+const imageUrl = 'IMAGES/21.jpg';
+let tiles = [];
+
+function initPuzzle(){
+  puzzle.innerHTML = '';
+  tiles = [];
+
+  for(let row=0; row<gridSize; row++){
+    for(let col=0; col<gridSize; col++){
+      let tile = document.createElement('div');
+      tile.classList.add('tile');
+      tile.style.backgroundImage = `url(${imageUrl})`;
+      tile.style.backgroundPosition = `-${col*100}px -${row*100}px`;
+      tile.dataset.correct = row*gridSize + col;
+      tile.dataset.current = row*gridSize + col;
+      tile.draggable = true;
+      puzzle.appendChild(tile);
+      tiles.push(tile);
+    }
+  }
+
+  // Shuffle tiles
+  for(let i=tiles.length-1;i>0;i--){
+    let j = Math.floor(Math.random()* (i+1));
+    [tiles[i].dataset.current, tiles[j].dataset.current] = [tiles[j].dataset.current, tiles[i].dataset.current];
+    [tiles[i].style.backgroundPosition, tiles[j].style.backgroundPosition] = [tiles[j].style.backgroundPosition, tiles[i].style.backgroundPosition];
+  }
+
+  // Drag and Drop
+  let dragged = null;
+  tiles.forEach(tile=>{
+    tile.addEventListener('dragstart', e=>{ dragged=tile; tile.classList.add('dragging'); });
+    tile.addEventListener('dragend', e=>{ tile.classList.remove('dragging'); checkPuzzle(); });
+    tile.addEventListener('dragover', e=>e.preventDefault());
+    tile.addEventListener('drop', e=>{
+      e.preventDefault();
+      if(dragged === tile) return;
+      // swap current positions
+      let temp = dragged.dataset.current;
+      dragged.dataset.current = tile.dataset.current;
+      tile.dataset.current = temp;
+      // swap visuals
+      let tempPos = dragged.style.backgroundPosition;
+      dragged.style.backgroundPosition = tile.style.backgroundPosition;
+      tile.style.backgroundPosition = tempPos;
+    });
+  });
+}
+
+function checkPuzzle(){
+  if(tiles.every(tile=>tile.dataset.current === tile.dataset.correct)){
+    puzzleMessage.style.display = 'block';
+  }
+}
 </script>
+
 </body>
 </html>
