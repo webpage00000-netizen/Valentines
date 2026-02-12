@@ -79,14 +79,16 @@
   .row {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
+    gap: 5px;
+    flex-wrap: nowrap; /* prevent wrapping */
   }
 
+  /* Row-specific key widths */
+  #row1 .key { flex: 0 0 calc((100% - 9*5px)/10); } /* 10 keys Q-P */
+  #row2 .key { flex: 0 0 calc((100% - 8*5px)/9); }  /* 9 keys A-L */
+  #row3 .key { flex: 0 0 calc((100% - 8*5px)/9); }  /* 9 keys - Z-M, Del */
+
   .key {
-    flex: 1 1 calc(10% - 6px);
-    max-width: 50px;
-    min-width: 40px;
     height: 50px;
     border-radius: 10px;
     display: flex;
@@ -175,34 +177,12 @@
 
   /* Mobile adjustments */
   @media (max-width: 400px){
-    h1 {
-      font-size: 1.6em;
-    }
-
-    .box {
-      font-size: 20px;
-      max-width: 50px;
-      height: 50px;
-    }
-
-    .key {
-      font-size: 14px;
-      max-width: 45px;
-      height: 45px;
-    }
-
-    #shortMessage {
-      font-size: 14px;
-    }
-
-    #loading {
-      font-size: 16px;
-    }
-
-    #proceedBtn {
-      font-size: 16px;
-      padding: 8px 18px;
-    }
+    h1 { font-size: 1.6em; }
+    .box { font-size: 20px; max-width: 50px; height: 50px; }
+    .key { font-size: 14px; height: 45px; }
+    #shortMessage { font-size: 14px; }
+    #loading { font-size: 16px; }
+    #proceedBtn { font-size: 16px; padding: 8px 18px; }
   }
 </style>
 </head>
@@ -328,10 +308,7 @@
 
   function checkInput(){
     if(input.length === 3 && input.map(x=>x.letter).join('') === "YES"){
-      // Fade out keyboard
       keyboardDiv.classList.add('hidden');
-
-      // Show short message and loading
       shortMessage.style.display = "block";
       loading.style.display = "block";
 
@@ -349,7 +326,6 @@
     }
   }
 
-  // Create keyboard rows
   createRow('row1', rows.row1);
   createRow('row2', rows.row2);
   createRow('row3', rows.row3);
@@ -357,7 +333,6 @@
   proceedBtn.addEventListener('click', () => {
     alert("Proceeding...");
   });
-
 </script>
 </body>
 </html>
