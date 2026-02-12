@@ -15,17 +15,20 @@
 body{
   height:100vh;
   overflow:hidden;
-  background:#111;
+  background:#0b0b0f;
   position:relative;
-  font-family:sans-serif;
 }
 
-/* Frame Style */
+/* Base strip */
+.strip{
+  display:flex;
+  position:absolute;
+}
+
+/* Frame base */
 .frame{
-  width:150px;
-  height:200px;
   background:black;
-  margin:10px;
+  margin:8px;
   border:6px solid black;
   position:relative;
   flex-shrink:0;
@@ -43,7 +46,7 @@ body{
   content:"";
   position:absolute;
   width:100%;
-  height:12px;
+  height:10px;
   background:repeating-linear-gradient(
     90deg,
     #222 0px,
@@ -53,31 +56,49 @@ body{
   );
 }
 
-.frame::before{ top:-16px; }
-.frame::after{ bottom:-16px; }
+.frame::before{ top:-14px; }
+.frame::after{ bottom:-14px; }
 
-/* Strip base */
-.strip{
-  display:flex;
-  position:absolute;
+/* Sizes */
+.small .frame{ width:100px; height:130px; }
+.medium .frame{ width:150px; height:200px; }
+.large .frame{ width:200px; height:260px; }
+
+/* Horizontal Left */
+.h-left{
+  top:8%;
+  animation:moveLeft 35s linear infinite;
 }
 
-/* Horizontal */
-.horizontal{
-  top:10%;
-  animation:moveLeft 30s linear infinite;
+/* Horizontal Right */
+.h-right{
+  top:28%;
+  animation:moveRight 40s linear infinite;
 }
 
+/* Vertical */
+.vertical{
+  left:2%;
+  flex-direction:column;
+  animation:moveUp 45s linear infinite;
+}
+
+/* Diagonal */
+.diagonal{
+  bottom:5%;
+  left:-10%;
+  animation:moveDiagonal 50s linear infinite;
+}
+
+/* Animations */
 @keyframes moveLeft{
   from{transform:translateX(0);}
   to{transform:translateX(-50%);}
 }
 
-/* Vertical */
-.vertical{
-  left:5%;
-  flex-direction:column;
-  animation:moveUp 35s linear infinite;
+@keyframes moveRight{
+  from{transform:translateX(-50%);}
+  to{transform:translateX(0);}
 }
 
 @keyframes moveUp{
@@ -85,40 +106,12 @@ body{
   to{transform:translateY(-50%);}
 }
 
-/* Diagonal */
-.diagonal{
-  bottom:5%;
-  animation:moveDiagonal 40s linear infinite;
-}
-
 @keyframes moveDiagonal{
   from{transform:translate(0,0);}
-  to{transform:translate(-50%,-50%);}
+  to{transform:translate(-40%,-40%);}
 }
 
-/* Circular */
-.circle-container{
-  position:absolute;
-  top:50%;
-  left:50%;
-  width:400px;
-  height:400px;
-  margin-left:-200px;
-  margin-top:-200px;
-  animation:rotate 20s linear infinite;
-}
-
-@keyframes rotate{
-  from{transform:rotate(0deg);}
-  to{transform:rotate(360deg);}
-}
-
-.circle-strip{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-}
-
+/* Title */
 .title{
   position:absolute;
   top:50%;
@@ -126,28 +119,29 @@ body{
   transform:translate(-50%,-50%);
   color:white;
   font-size:2rem;
-  opacity:0.8;
+  opacity:0.7;
+  font-family:sans-serif;
+  letter-spacing:2px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="strip horizontal" id="strip1"></div>
-<div class="strip vertical" id="strip2"></div>
-<div class="strip diagonal" id="strip3"></div>
-
-<div class="circle-container">
-  <div class="circle-strip" id="strip4"></div>
-</div>
+<div class="strip small h-left" id="strip1"></div>
+<div class="strip medium h-right" id="strip2"></div>
+<div class="strip large vertical" id="strip3"></div>
+<div class="strip medium diagonal" id="strip4"></div>
+<div class="strip small h-left" style="top:75%;" id="strip5"></div>
 
 <div class="title">Our Love Story 🎬💖</div>
 
 <script>
 const totalImages = 21;
 
-function generateHorizontal(stripId){
+function generateStrip(stripId){
   const strip = document.getElementById(stripId);
+
   for(let repeat=0; repeat<2; repeat++){
     for(let i=1; i<=totalImages; i++){
       const frame = document.createElement("div");
@@ -162,26 +156,11 @@ function generateHorizontal(stripId){
   }
 }
 
-function generateVertical(stripId){
-  const strip = document.getElementById(stripId);
-  for(let repeat=0; repeat<2; repeat++){
-    for(let i=1; i<=totalImages; i++){
-      const frame = document.createElement("div");
-      frame.classList.add("frame");
-
-      const img = document.createElement("img");
-      img.src = "IMAGES/" + i + ".jpg";
-
-      frame.appendChild(img);
-      strip.appendChild(frame);
-    }
-  }
-}
-
-generateHorizontal("strip1");
-generateVertical("strip2");
-generateHorizontal("strip3");
-generateHorizontal("strip4");
+generateStrip("strip1");
+generateStrip("strip2");
+generateStrip("strip3");
+generateStrip("strip4");
+generateStrip("strip5");
 </script>
 
 </body>
