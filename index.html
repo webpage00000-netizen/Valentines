@@ -66,27 +66,22 @@ body{
 
 /* Horizontal Left */
 .h-left{
-  top:8%;
   animation:moveLeft 35s linear infinite;
 }
 
 /* Horizontal Right */
 .h-right{
-  top:28%;
   animation:moveRight 40s linear infinite;
 }
 
 /* Vertical */
 .vertical{
-  left:2%;
   flex-direction:column;
   animation:moveUp 45s linear infinite;
 }
 
 /* Diagonal */
 .diagonal{
-  bottom:5%;
-  left:-10%;
   animation:moveDiagonal 50s linear infinite;
 }
 
@@ -119,29 +114,26 @@ body{
   transform:translate(-50%,-50%);
   color:white;
   font-size:2rem;
-  opacity:0.7;
+  opacity:0.8;
   font-family:sans-serif;
   letter-spacing:2px;
+  text-align:center;
+  z-index:100;
 }
 </style>
 </head>
 
 <body>
 
-<div class="strip small h-left" id="strip1"></div>
-<div class="strip medium h-right" id="strip2"></div>
-<div class="strip large vertical" id="strip3"></div>
-<div class="strip medium diagonal" id="strip4"></div>
-<div class="strip small h-left" style="top:75%;" id="strip5"></div>
-
 <div class="title">Our Love Story 🎬💖</div>
 
 <script>
 const totalImages = 21;
+const totalStrips = 12; // change this to increase/decrease strips
+const sizes = ['small', 'medium', 'large'];
+const directions = ['h-left', 'h-right', 'vertical', 'diagonal'];
 
-function generateStrip(stripId){
-  const strip = document.getElementById(stripId);
-
+function generateStrip(strip){
   for(let repeat=0; repeat<2; repeat++){
     for(let i=1; i<=totalImages; i++){
       const frame = document.createElement("div");
@@ -156,11 +148,32 @@ function generateStrip(stripId){
   }
 }
 
-generateStrip("strip1");
-generateStrip("strip2");
-generateStrip("strip3");
-generateStrip("strip4");
-generateStrip("strip5");
+// Generate strips dynamically
+for(let i=1; i<=totalStrips; i++){
+  const strip = document.createElement('div');
+  strip.classList.add('strip');
+
+  // Random size and direction
+  const size = sizes[Math.floor(Math.random() * sizes.length)];
+  const dir = directions[Math.floor(Math.random() * directions.length)];
+  strip.classList.add(size, dir);
+
+  // Random top or left depending on direction
+  if(dir === 'vertical'){
+    strip.style.left = Math.random() * 90 + '%';
+    strip.style.top = '0px';
+  } else if(dir === 'diagonal'){
+    strip.style.left = Math.random() * 80 - 10 + '%'; // can go negative
+    strip.style.bottom = Math.random() * 50 + '%';
+  } else {
+    strip.style.top = Math.random() * 90 + '%';
+    strip.style.left = '0px';
+  }
+
+  strip.id = 'strip' + i;
+  document.body.appendChild(strip);
+  generateStrip(strip);
+}
 </script>
 
 </body>
