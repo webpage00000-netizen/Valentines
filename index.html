@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Our Memories 🎞️</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+<title>Our Love Story 🎞️</title>
 
 <style>
 *{
@@ -17,67 +15,18 @@
 body{
   height:100vh;
   overflow:hidden;
-  background:#0f0f1a;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-family:'Poppins', sans-serif;
-  color:white;
+  background:#111;
+  position:relative;
+  font-family:sans-serif;
 }
 
-/* Title */
-.title{
-  position:absolute;
-  top:30px;
-  font-family:'Great Vibes';
-  font-size:2.5rem;
-  color:#ff4d6d;
-}
-
-/* Film container */
-.film-wrapper{
-  position:absolute;
-  width:120%;
-  display:flex;
-  flex-direction:column;
-  gap:80px;
-}
-
-/* Film strip */
-.film-strip{
-  display:flex;
-  width:max-content;
-  animation-duration:40s;
-  animation-timing-function:linear;
-  animation-iteration-count:infinite;
-}
-
-/* Different directions */
-.left{
-  animation-name:scrollLeft;
-}
-
-.right{
-  animation-name:scrollRight;
-}
-
-@keyframes scrollLeft{
-  0%{transform:translateX(0);}
-  100%{transform:translateX(-50%);}
-}
-
-@keyframes scrollRight{
-  0%{transform:translateX(-50%);}
-  100%{transform:translateX(0);}
-}
-
-/* Frame */
+/* Frame Style */
 .frame{
-  width:180px;
-  height:240px;
+  width:150px;
+  height:200px;
   background:black;
-  margin:0 12px;
-  border:8px solid black;
+  margin:10px;
+  border:6px solid black;
   position:relative;
   flex-shrink:0;
 }
@@ -94,50 +43,111 @@ body{
   content:"";
   position:absolute;
   width:100%;
-  height:14px;
+  height:12px;
   background:repeating-linear-gradient(
     90deg,
-    #111 0px,
-    #111 10px,
-    transparent 10px,
-    transparent 20px
+    #222 0px,
+    #222 8px,
+    transparent 8px,
+    transparent 16px
   );
 }
 
-.frame::before{ top:-18px; }
-.frame::after{ bottom:-18px; }
+.frame::before{ top:-16px; }
+.frame::after{ bottom:-16px; }
 
-/* Curve illusion */
-.strip1{ transform:rotate(-8deg); }
-.strip2{ transform:rotate(6deg); }
-.strip3{ transform:rotate(-5deg); }
+/* Strip base */
+.strip{
+  display:flex;
+  position:absolute;
+}
 
-/* Responsive */
-@media(max-width:600px){
-  .frame{
-    width:120px;
-    height:170px;
-  }
+/* Horizontal */
+.horizontal{
+  top:10%;
+  animation:moveLeft 30s linear infinite;
+}
+
+@keyframes moveLeft{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
+}
+
+/* Vertical */
+.vertical{
+  left:5%;
+  flex-direction:column;
+  animation:moveUp 35s linear infinite;
+}
+
+@keyframes moveUp{
+  from{transform:translateY(0);}
+  to{transform:translateY(-50%);}
+}
+
+/* Diagonal */
+.diagonal{
+  bottom:5%;
+  animation:moveDiagonal 40s linear infinite;
+}
+
+@keyframes moveDiagonal{
+  from{transform:translate(0,0);}
+  to{transform:translate(-50%,-50%);}
+}
+
+/* Circular */
+.circle-container{
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:400px;
+  height:400px;
+  margin-left:-200px;
+  margin-top:-200px;
+  animation:rotate 20s linear infinite;
+}
+
+@keyframes rotate{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+
+.circle-strip{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.title{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  color:white;
+  font-size:2rem;
+  opacity:0.8;
 }
 </style>
 </head>
 
 <body>
 
-<div class="title">Our Beautiful Memories 🎞️💖</div>
+<div class="strip horizontal" id="strip1"></div>
+<div class="strip vertical" id="strip2"></div>
+<div class="strip diagonal" id="strip3"></div>
 
-<div class="film-wrapper">
-  <div class="film-strip left strip1" id="strip1"></div>
-  <div class="film-strip right strip2" id="strip2"></div>
-  <div class="film-strip left strip3" id="strip3"></div>
+<div class="circle-container">
+  <div class="circle-strip" id="strip4"></div>
 </div>
+
+<div class="title">Our Love Story 🎬💖</div>
 
 <script>
 const totalImages = 21;
 
-function generateStrip(stripId){
+function generateHorizontal(stripId){
   const strip = document.getElementById(stripId);
-
   for(let repeat=0; repeat<2; repeat++){
     for(let i=1; i<=totalImages; i++){
       const frame = document.createElement("div");
@@ -152,9 +162,26 @@ function generateStrip(stripId){
   }
 }
 
-generateStrip("strip1");
-generateStrip("strip2");
-generateStrip("strip3");
+function generateVertical(stripId){
+  const strip = document.getElementById(stripId);
+  for(let repeat=0; repeat<2; repeat++){
+    for(let i=1; i<=totalImages; i++){
+      const frame = document.createElement("div");
+      frame.classList.add("frame");
+
+      const img = document.createElement("img");
+      img.src = "IMAGES/" + i + ".jpg";
+
+      frame.appendChild(img);
+      strip.appendChild(frame);
+    }
+  }
+}
+
+generateHorizontal("strip1");
+generateVertical("strip2");
+generateHorizontal("strip3");
+generateHorizontal("strip4");
 </script>
 
 </body>
