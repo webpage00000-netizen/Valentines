@@ -1,1 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Memories 🎞️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  height:100vh;
+  overflow:hidden;
+  background:#0f0f1a;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  font-family:'Poppins', sans-serif;
+  color:white;
+}
+
+/* Title */
+.title{
+  position:absolute;
+  top:40px;
+  font-family:'Great Vibes';
+  font-size:2.5rem;
+  color:#ff4d6d;
+  text-align:center;
+}
+
+/* Film container */
+.film-container{
+  width:100%;
+  overflow:hidden;
+  position:relative;
+}
+
+/* Film strip */
+.film-strip{
+  display:flex;
+  width:max-content;
+  animation:scrollLeft 40s linear infinite;
+}
+
+@keyframes scrollLeft{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
+
+/* Frame */
+.frame{
+  width:200px;
+  height:260px;
+  background:black;
+  margin:0 12px;
+  border:8px solid black;
+  position:relative;
+  flex-shrink:0;
+}
+
+.frame img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* Film holes */
+.frame::before,
+.frame::after{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:15px;
+  background:repeating-linear-gradient(
+    90deg,
+    #111 0px,
+    #111 10px,
+    transparent 10px,
+    transparent 20px
+  );
+}
+
+.frame::before{ top:-20px; }
+.frame::after{ bottom:-20px; }
+
+/* Responsive */
+@media(max-width:600px){
+  .frame{
+    width:140px;
+    height:190px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">Our Beautiful Memories 🎞️💖</div>
+
+<div class="film-container">
+  <div class="film-strip" id="filmStrip"></div>
+</div>
+
+<script>
+const filmStrip = document.getElementById("filmStrip");
+const totalImages = 21;
+
+// Create images twice for seamless infinite scroll
+for(let repeat=0; repeat<2; repeat++){
+  for(let i=1; i<=totalImages; i++){
+    const frame = document.createElement("div");
+    frame.classList.add("frame");
+
+    const img = document.createElement("img");
+    img.src = "IMAGES/" + i + ".jpg";
+
+    frame.appendChild(img);
+    filmStrip.appendChild(frame);
+  }
+}
+</script>
+
+</body>
+</html>
 
