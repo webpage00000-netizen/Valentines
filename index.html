@@ -19,7 +19,6 @@ body{
   overflow:hidden;
   background:#0f0f1a;
   display:flex;
-  flex-direction:column;
   justify-content:center;
   align-items:center;
   font-family:'Poppins', sans-serif;
@@ -29,25 +28,37 @@ body{
 /* Title */
 .title{
   position:absolute;
-  top:40px;
+  top:30px;
   font-family:'Great Vibes';
   font-size:2.5rem;
   color:#ff4d6d;
-  text-align:center;
 }
 
 /* Film container */
-.film-container{
-  width:100%;
-  overflow:hidden;
-  position:relative;
+.film-wrapper{
+  position:absolute;
+  width:120%;
+  display:flex;
+  flex-direction:column;
+  gap:80px;
 }
 
 /* Film strip */
 .film-strip{
   display:flex;
   width:max-content;
-  animation:scrollLeft 40s linear infinite;
+  animation-duration:40s;
+  animation-timing-function:linear;
+  animation-iteration-count:infinite;
+}
+
+/* Different directions */
+.left{
+  animation-name:scrollLeft;
+}
+
+.right{
+  animation-name:scrollRight;
 }
 
 @keyframes scrollLeft{
@@ -55,10 +66,15 @@ body{
   100%{transform:translateX(-50%);}
 }
 
+@keyframes scrollRight{
+  0%{transform:translateX(-50%);}
+  100%{transform:translateX(0);}
+}
+
 /* Frame */
 .frame{
-  width:200px;
-  height:260px;
+  width:180px;
+  height:240px;
   background:black;
   margin:0 12px;
   border:8px solid black;
@@ -78,7 +94,7 @@ body{
   content:"";
   position:absolute;
   width:100%;
-  height:15px;
+  height:14px;
   background:repeating-linear-gradient(
     90deg,
     #111 0px,
@@ -88,14 +104,19 @@ body{
   );
 }
 
-.frame::before{ top:-20px; }
-.frame::after{ bottom:-20px; }
+.frame::before{ top:-18px; }
+.frame::after{ bottom:-18px; }
+
+/* Curve illusion */
+.strip1{ transform:rotate(-8deg); }
+.strip2{ transform:rotate(6deg); }
+.strip3{ transform:rotate(-5deg); }
 
 /* Responsive */
 @media(max-width:600px){
   .frame{
-    width:140px;
-    height:190px;
+    width:120px;
+    height:170px;
   }
 }
 </style>
@@ -105,29 +126,36 @@ body{
 
 <div class="title">Our Beautiful Memories 🎞️💖</div>
 
-<div class="film-container">
-  <div class="film-strip" id="filmStrip"></div>
+<div class="film-wrapper">
+  <div class="film-strip left strip1" id="strip1"></div>
+  <div class="film-strip right strip2" id="strip2"></div>
+  <div class="film-strip left strip3" id="strip3"></div>
 </div>
 
 <script>
-const filmStrip = document.getElementById("filmStrip");
 const totalImages = 21;
 
-// Create images twice for seamless infinite scroll
-for(let repeat=0; repeat<2; repeat++){
-  for(let i=1; i<=totalImages; i++){
-    const frame = document.createElement("div");
-    frame.classList.add("frame");
+function generateStrip(stripId){
+  const strip = document.getElementById(stripId);
 
-    const img = document.createElement("img");
-    img.src = "IMAGES/" + i + ".jpg";
+  for(let repeat=0; repeat<2; repeat++){
+    for(let i=1; i<=totalImages; i++){
+      const frame = document.createElement("div");
+      frame.classList.add("frame");
 
-    frame.appendChild(img);
-    filmStrip.appendChild(frame);
+      const img = document.createElement("img");
+      img.src = "IMAGES/" + i + ".jpg";
+
+      frame.appendChild(img);
+      strip.appendChild(frame);
+    }
   }
 }
+
+generateStrip("strip1");
+generateStrip("strip2");
+generateStrip("strip3");
 </script>
 
 </body>
 </html>
-
