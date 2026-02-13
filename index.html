@@ -948,11 +948,29 @@
       margin-top: 100px;
       flex-direction: column;
       align-items: center;
+      gap: 20px;
     }
 
     .letter-envelope {
       width: 90%;
-      max-width: 280px;
+      max-width: 320px;
+      height: 180px;
+    }
+
+    .envelope-flap {
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      border-top: 72px solid #ff6fa5;
+    }
+
+    .envelope-label {
+      font-size: 20px;
+      margin-top: 50px;
+    }
+
+    .heart-seal {
+      font-size: 35px;
+      margin-top: 8px;
     }
 
     #letterPaper {
@@ -960,8 +978,13 @@
       max-height: 75vh;
     }
 
+    #letterPaper::before {
+      left: 25px;
+    }
+
     #letterMessage {
-      font-size: 14px;
+      font-size: 15px;
+      line-height: 1.7;
     }
   }
 
