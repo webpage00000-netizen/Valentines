@@ -187,7 +187,14 @@ setTimeout(() => {
 /* ===== KEYBOARD ===== */
 const rows={row1:['Q','W','E','R','T','Y','U','I','O','P'],row2:['A','S','D','F','G','H','J','K','L'],row3:['-','Z','X','C','V','B','N','M','Del']};
 const clickable=['Y','E','S'],special=['N','O'];
-const boxes=[box1,box2,box3];
+// ✅ Fix: get boxes properly
+const boxes = [
+  document.getElementById('box1'),
+  document.getElementById('box2'),
+  document.getElementById('box3')
+];
+
+let input=[], specialPressed={N:false,O:false};
 let input=[],specialPressed={N:false,O:false};
 
 function createRow(id,letters){
