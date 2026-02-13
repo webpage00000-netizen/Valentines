@@ -406,15 +406,22 @@ document.getElementById('greyCard').addEventListener('click', () => {
 
   card.style.transition = 'all 0.7s ease';
   card.style.transform = 'rotateY(180deg) scale(1.06)';
-  card.style.background = 'linear-gradient(135deg, #ff6fa5, #d60000)';
-  card.innerHTML = '♡ Opened! ♡';
+  card.style.background = '#fff';
+  card.innerHTML = '<img src="https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">';
   tapText.style.display = 'none';
 
   setTimeout(() => {
-    msg.style.display = 'block';
-    msg.textContent = "You're my favorite person in the whole world ♥ Will you be my Valentine forever?";
-    nextBtn.style.display = 'inline-block';
-  }, 800);
+    card.style.transition = 'all 0.5s ease';
+    card.style.transform = 'rotateY(0deg) scale(1)';
+    card.style.background = 'linear-gradient(135deg, #ff6fa5, #d60000)';
+    card.innerHTML = '';
+    
+    setTimeout(() => {
+      msg.style.display = 'block';
+      msg.textContent = "You've come this far. Let me show you the memories we've shared that I cherish.";
+      nextBtn.style.display = 'inline-block';
+    }, 600);
+  }, 3000);
 });
 
 // Next button
