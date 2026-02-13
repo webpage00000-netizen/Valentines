@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-
   /* ===== LOADING SCREEN ===== */
   #loadingScreen {
     position: fixed; inset: 0;
@@ -35,7 +34,6 @@
     opacity: 0; transition: 0.4s;
   }
   .show { opacity: 1; transform: scale(1.1); }
-
   /* ===== MAIN PAGE ===== */
   body {
     font-family: 'Montserrat', sans-serif;
@@ -89,7 +87,6 @@
     display: none; transition: 0.2s;
   }
   #proceedBtn:hover { background: #ff1a1a; transform: scale(1.05); }
-
   /* ===== PUZZLE ===== */
   #puzzleContainer { display: none; flex-direction: column; align-items: center; }
   #puzzleInstruction { margin-bottom: 10px; text-align: center; font-size: 16px; color: #333; }
@@ -105,7 +102,6 @@
     transform-style: preserve-3d;
   }
   .tile.dragging { opacity: 0.6; transform: scale(1.05); }
-
   /* Merged card after puzzle solve */
   #mergedReveal {
     display: none; justify-content: center; margin: 30px 0 20px;
@@ -134,7 +130,6 @@
 </style>
 </head>
 <body>
-
 <!-- LOADING -->
 <div id="loadingScreen">
   <div class="cat-wrapper">
@@ -145,7 +140,6 @@
   <div class="countdown" id="countdown"></div>
 </div>
 <audio id="popSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
-
 <!-- MAIN -->
 <div class="container" id="mainContainer" style="display:none;">
   <h1>Will you be my Valentine?</h1>
@@ -164,17 +158,14 @@
   <div id="loading">LOADING<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span> <span id="countdown8">8</span>s</div>
   <button id="proceedBtn">Proceed</button>
 </div>
-
 <!-- PUZZLE -->
 <div id="puzzleContainer">
   <h1>Complete the Puzzle!</h1>
   <div id="puzzleInstruction">Drag pieces to solve.</div>
   <div id="puzzle"></div>
-
   <div id="mergedReveal">
     <div id="greyCard">Tap me ♥</div>
   </div>
-
   <div id="tapTextFinal">Tap the card ↑</div>
   <div id="shortMessageFinal"></div>
   <button id="nextAfterTap">Next</button>
@@ -186,12 +177,10 @@ const loadingScreen = document.getElementById("loadingScreen");
 const countdownEl = document.getElementById("countdown");
 const pop = document.getElementById("popSound");
 let count = 5;
-
 setTimeout(() => {
   countdownEl.classList.add("show");
   countdownEl.innerText = "In " + count;
   pop.play();
-
   const interval = setInterval(() => {
     countdownEl.classList.remove("show");
     setTimeout(() => {
@@ -289,7 +278,6 @@ function checkInput() {
     document.getElementById('keyboard').classList.add("hidden");
     document.getElementById('shortMessage').style.display = "block";
     document.getElementById('loading').style.display = "block";
-
     let c = 8;
     const interval = setInterval(() => {
       c--;
@@ -315,35 +303,32 @@ document.getElementById('proceedBtn').onclick = () => {
 // ===== PUZZLE =====
 const puzzle = document.getElementById('puzzle');
 const puzzleInstruction = document.getElementById('puzzleInstruction');
-let tiles = [];
-const imageUrl = 'IMAGES/22.jpg'; // ← your image path
+const imageUrl = 'IMAGES/22.jpg'; // or use './IMAGES/22.jpg' or full raw URL if needed
 
 function initPuzzle() {
   puzzle.innerHTML = '';
-  tiles = [];
-
   for (let row = 0; row < 3; row++) {
     for (let col = 0; col < 3; col++) {
       let tile = document.createElement('div');
       tile.classList.add('tile');
       tile.style.backgroundImage = `url(${imageUrl})`;
       tile.style.backgroundPosition = `-${col * 100}px -${row * 100}px`;
-      tile.dataset.index = row * 3 + col;
       tile.draggable = true;
       puzzle.appendChild(tile);
-      tiles.push(tile);
     }
   }
 
-  // Shuffle tiles
+  // Shuffle the tiles (DOM order)
+  const tiles = Array.from(puzzle.children);
   tiles.sort(() => Math.random() - 0.5);
-  tiles.forEach(t => puzzle.appendChild(t));
+  tiles.forEach(t => puzzle.appendChild(t)); // re-append in shuffled order
 
   let dragged = null;
   tiles.forEach(tile => {
-    tile.addEventListener('dragstart', () => { dragged = tile; });
-    tile.addEventListener('dragover', e => e.preventDefault());
-    tile.addEventListener('drop', () => {
+    tile.addEventListener('dragstart', () => { dragged = tile; tile.classList.add('dragging'); });
+    tile.addEventListener('dragend',   () => { tile.classList.remove('dragging'); });
+    tile.addEventListener('dragover',  e  => e.preventDefault());
+    tile.addEventListener('drop',      () => {
       if (dragged && dragged !== tile) {
         let temp = dragged.style.backgroundPosition;
         dragged.style.backgroundPosition = tile.style.backgroundPosition;
@@ -354,16 +339,32 @@ function initPuzzle() {
   });
 }
 
+function normalizePosition(str) {
+  return str
+    .replace(/\s+/g, ' ')   // collapse multiple spaces
+    .trim();                // remove leading/trailing
+}
+
 function checkPuzzle() {
-  const isSolved = tiles.every((tile, idx) => {
+  console.log("Checking puzzle..."); // debug
+
+  const isSolved = Array.from(puzzle.children).every((tile, idx) => {
     const correctX = `-${(idx % 3) * 100}px`;
     const correctY = `-${Math.floor(idx / 3) * 100}px`;
-    return tile.style.backgroundPosition === `${correctX} ${correctY}`;
+    const expected = `${correctX} ${correctY}`;
+
+    const current = normalizePosition(tile.style.backgroundPosition);
+
+    console.log(`Slot ${idx}: expected "${expected}" | actual "${current}"`); // debug
+
+    return current === expected;
   });
 
   if (isSolved) {
-    // Flip tiles to grey
-    tiles.forEach((tile, i) => {
+    console.log("PUZZLE SOLVED! Starting animation.");
+
+    // Flip tiles to grey one by one
+    Array.from(puzzle.children).forEach((tile, i) => {
       setTimeout(() => {
         tile.style.transform = "rotateY(180deg)";
         tile.style.backgroundImage = "none";
@@ -371,14 +372,12 @@ function checkPuzzle() {
       }, i * 140);
     });
 
-    // Merge into one card
+    // Show merged card after flips
     setTimeout(() => {
       puzzle.style.display = "none";
       puzzleInstruction.style.display = "none";
-
       const merged = document.getElementById("mergedReveal");
       merged.style.display = "flex";
-
       const card = document.getElementById("greyCard");
       card.style.opacity = "0";
       card.style.transform = "scale(0.75)";
@@ -387,7 +386,6 @@ function checkPuzzle() {
         card.style.opacity = "1";
         card.style.transform = "scale(1)";
       }, 50);
-
       document.getElementById("tapTextFinal").style.display = "block";
     }, 3 * 140 + 900);
   }
@@ -410,9 +408,6 @@ document.getElementById("greyCard").addEventListener("click", () => {
   setTimeout(() => {
     msg.style.display = "block";
     msg.textContent = "You're my favorite person in the whole world ♥ Will you be my Valentine forever?";
-    //               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    //               ← change this message to whatever you want!
-
     nextBtn.style.display = "inline-block";
   }, 800);
 });
@@ -420,10 +415,8 @@ document.getElementById("greyCard").addEventListener("click", () => {
 // ===== NEXT BUTTON =====
 document.getElementById("nextAfterTap").onclick = () => {
   alert("Yayyyy! 💕 Now comes the biggest hug everrrr!");
-  // You can also do: window.location.href = "next-surprise.html";
-  // or show more content, play music, show photos, etc.
+  // You can replace alert with: window.location.href = "next-page.html"; or show more content
 };
-
 </script>
 </body>
 </html>
