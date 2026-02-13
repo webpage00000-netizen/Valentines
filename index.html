@@ -4,133 +4,159 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine Surprise</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;500;600&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
 <style>
-  body {
-    font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(135deg, #ffe6e6, #fff0f5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    min-height: 100vh;
-    margin: 0;
-  }
+*{margin:0;padding:0;box-sizing:border-box;}
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: all 1.5s ease;
-    width: 100%;
-    max-width: 450px;
-  }
+/* ================= LOADING SCREEN ================= */
 
-  h1 {
-    font-family: 'Fredoka One', cursive;
-    color: #d60000;
-    font-size: 2em;
-    text-align: center;
-    margin-bottom: 20px;
-  }
+#loadingScreen{
+  position:fixed;
+  inset:0;
+  background:#f9fafc;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  z-index:9999;
+  font-family:'Poppins', sans-serif;
+  overflow:hidden;
+  transition:opacity 0.8s ease;
+}
 
-  .input-boxes { display: flex; gap: 10px; margin-bottom: 15px; justify-content: center; }
+.cat-wrapper{
+  padding:12px;
+  border-radius:22px;
+  background:white;
+  box-shadow:0 10px 25px rgba(0,0,0,0.06);
+  margin-bottom:20px;
+}
 
-  .box {
-    flex: 1;
-    max-width: 60px;
-    height: 60px;
-    min-width: 50px;
-    border: 3px solid #d60000;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.2s, background-color 0.2s;
-    background-color: #fff;
-    color: #fff;
-    font-weight: bold;
-  }
+.cat{
+  width:170px;
+  max-width:60vw;
+  border-radius:18px;
+  border:1.5px solid #ffd6e8;
+}
 
-  .keyboard { display: flex; flex-direction: column; gap: 10px; transition: opacity 1.5s ease; width: 100%; }
-  .keyboard.hidden { opacity: 0; pointer-events: none; }
+.loading-text{font-size:18px;color:#666;}
+.countdown{font-size:55px;font-weight:700;color:#ff6fa5;margin-top:15px;opacity:0;transition:0.4s;}
+.show{opacity:1;transform:scale(1.1);}
 
-  .row { display: flex; justify-content: center; gap: 5px; flex-wrap: nowrap; }
+.heart{
+  position:absolute;
+  bottom:-20px;
+  font-size:20px;
+  color:#ff9ecf;
+  animation:floatUp linear forwards;
+}
+@keyframes floatUp{
+  0%{transform:translateY(0);opacity:0.8;}
+  100%{transform:translateY(-110vh);opacity:0;}
+}
 
-  /* Desktop: evenly spaced keys */
-  #row1 .key, #row2 .key, #row3 .key { flex: 1 1 0; }
+/* ================= MAIN PAGE ================= */
 
-  .key {
-    height: 50px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ccc;
-    color: white;
-    font-weight: bold;
-    user-select: none;
-    transition: all 0.2s;
-    cursor: not-allowed;
-    font-size: 16px;
-    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
-  }
+body{
+  font-family:'Montserrat', sans-serif;
+  background: linear-gradient(135deg, #ffe6e6, #fff0f5);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px;
+  min-height:100vh;
+}
 
-  .key.highlight { background-color: #d60000; cursor: pointer; }
-  .key.highlight:hover { transform: scale(1.2); }
-  .key.special { background-color: #ff6600; cursor: pointer; }
-  .key.special:hover { transform: scale(1.1); }
+.container{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:100%;
+  max-width:450px;
+  transition:1.5s ease;
+}
 
-  #message { margin-top: 10px; font-size: 20px; color: #d60000; text-align: center; font-weight: 600; }
-  #shortMessage { margin-top: 10px; font-size: 16px; color: #333; text-align: center; display: none; }
-  #loading { font-size: 18px; margin-top: 10px; display: none; text-align: center; }
-  .dot { animation: blink 1s infinite; }
-  .dot:nth-child(2) { animation-delay: 0.2s; }
-  .dot:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes blink { 0%,50%,100%{opacity:0;} 25%,75%{opacity:1;} }
+h1{
+  font-family:'Fredoka One', cursive;
+  color:#d60000;
+  font-size:2em;
+  text-align:center;
+  margin-bottom:20px;
+}
 
-  #proceedBtn { margin-top: 20px; padding: 10px 20px; font-size: 18px; background-color: #d60000; color: white; border: none; border-radius: 10px; cursor: pointer; display: none; transition: transform 0.2s, background-color 0.2s; }
-  #proceedBtn:hover { background-color: #ff1a1a; transform: scale(1.05); }
+.input-boxes{display:flex;gap:10px;margin-bottom:15px;}
+.box{
+  width:60px;height:60px;border:3px solid #d60000;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:bold;background:#fff;color:#fff;
+}
 
-  /* Puzzle styles */
-  #puzzleContainer { display: none; flex-direction: column; align-items: center; }
-  #puzzleInstruction { margin-bottom:10px; text-align:center; font-size:16px; color:#333; }
-  #puzzle { display: grid; grid-template-columns: repeat(3, 100px); grid-template-rows: repeat(3, 100px); gap: 5px; margin-bottom: 20px; }
-  .tile { width: 100px; height: 100px; background-size: 300px 300px; cursor: grab; border-radius: 8px; transition: transform 0.2s; }
-  .tile.dragging { opacity: 0.6; transform: scale(1.05); }
-  .tile.flip { transform: rotateY(180deg); transition: transform 0.6s ease; }
-  #puzzleMessage { font-size: 20px; color: #d60000; font-weight: bold; text-align: center; display: none; }
+.keyboard{display:flex;flex-direction:column;gap:10px;width:100%;}
+.keyboard.hidden{opacity:0;pointer-events:none;}
 
-  /* Final reveal */
-  #finalReveal { display:none; position:relative; width:300px; height:300px; flex-direction:column; align-items:center; }
-  #finalImage { width:100%; height:100%; border-radius:12px; }
-  #finalMessage { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center; color:#fff; font-size:20px; font-weight:bold; text-shadow:1px 1px 5px #000; }
-  #nextBtn { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); padding:10px 20px; border:none; border-radius:10px; background-color:#d60000; color:white; font-size:16px; cursor:pointer; }
+.row{display:flex;justify-content:center;gap:5px;}
+.key{
+  flex:1;height:50px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:#ccc;color:white;font-weight:bold;
+  cursor:not-allowed;transition:0.2s;
+}
+.key.highlight{background:#d60000;cursor:pointer;}
+.key.highlight:hover{transform:scale(1.1);}
+.key.special{background:#ff6600;cursor:pointer;}
+.key.special:hover{transform:scale(1.1);}
 
-  /* Mobile overrides for keyboard shrink */
-  @media (max-width: 400px){
-    #row1 .key { flex: 0 0 calc((100% - 9*5px)/10); }
-    #row2 .key { flex: 0 0 calc((100% - 8*5px)/9); }
-    #row3 .key { flex: 0 0 calc((100% - 8*5px)/9); }
-    .box { font-size: 20px; max-width: 50px; height: 50px; }
-    .key { font-size: 14px; height: 45px; }
-    #shortMessage { font-size: 14px; }
-    #loading { font-size: 16px; }
-    #proceedBtn { font-size: 16px; padding: 8px 18px; }
-    #puzzle { grid-template-columns: repeat(3, 90px); grid-template-rows: repeat(3, 90px); gap: 4px; }
-    .tile { width: 90px; height: 90px; background-size: 270px 270px; }
-    #finalReveal { width: 270px; height:270px; }
-  }
+#message{margin-top:10px;font-size:20px;color:#d60000;font-weight:600;text-align:center;}
+#shortMessage{margin-top:10px;font-size:16px;color:#333;text-align:center;display:none;}
+#loading{font-size:18px;margin-top:10px;display:none;text-align:center;}
+.dot{animation:blink 1s infinite;}
+.dot:nth-child(2){animation-delay:0.2s;}
+.dot:nth-child(3){animation-delay:0.4s;}
+@keyframes blink{0%,50%,100%{opacity:0;}25%,75%{opacity:1;}}
+
+#proceedBtn{
+  margin-top:20px;padding:10px 20px;font-size:18px;
+  background:#d60000;color:white;border:none;border-radius:10px;
+  cursor:pointer;display:none;transition:0.2s;
+}
+#proceedBtn:hover{background:#ff1a1a;transform:scale(1.05);}
+
+/* ================= PUZZLE (ORIGINAL) ================= */
+
+#puzzleContainer{display:none;flex-direction:column;align-items:center;}
+#puzzleInstruction{margin-bottom:10px;text-align:center;font-size:16px;color:#333;}
+#puzzle{display:grid;grid-template-columns:repeat(3,100px);grid-template-rows:repeat(3,100px);gap:5px;margin-bottom:20px;}
+.tile{width:100px;height:100px;background-size:300px 300px;cursor:grab;border-radius:8px;transition:0.2s;}
+.tile.dragging{opacity:0.6;transform:scale(1.05);}
+.tile.flip{transform:rotateY(180deg);transition:0.6s ease;}
+#finalReveal{display:none;position:relative;width:300px;height:300px;flex-direction:column;align-items:center;}
+#finalImage{width:100%;height:100%;border-radius:12px;}
+#finalMessage{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#fff;font-size:20px;font-weight:bold;text-shadow:1px 1px 5px #000;}
+#nextBtn{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);padding:10px 20px;border:none;border-radius:10px;background:#d60000;color:white;font-size:16px;cursor:pointer;}
+
 </style>
 </head>
 <body>
 
-<div class="container" id="mainContainer">
-  <h1 id="title">Will you be my Valentine?</h1>
+<!-- LOADING SCREEN -->
+<div id="loadingScreen">
+  <div class="cat-wrapper">
+    <img class="cat" src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif">
+  </div>
+  <div class="loading-text">This will take a few seconds</div>
+  <div class="loading-text">Get ready...</div>
+  <div class="countdown" id="countdown"></div>
+</div>
 
-  <div class="input-boxes" id="inputBoxes">
+<audio id="popSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+
+<!-- MAIN CONTENT -->
+<div class="container" id="mainContainer" style="display:none;">
+  <h1>Will you be my Valentine?</h1>
+
+  <div class="input-boxes">
     <div class="box" id="box1"></div>
     <div class="box" id="box2"></div>
     <div class="box" id="box3"></div>
@@ -144,18 +170,16 @@
 
   <div id="message"></div>
   <div id="shortMessage">Please wait a few seconds while we prepare a surprise for you...</div>
-  <div id="loading">LOADING<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span> <span id="countdown">8</span>s</div>
+  <div id="loading">LOADING<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span> <span id="countdown8">8</span>s</div>
   <button id="proceedBtn">Proceed</button>
 </div>
 
-<!-- Puzzle Section -->
+<!-- PUZZLE SECTION -->
 <div id="puzzleContainer">
   <h1>Complete the Puzzle!</h1>
   <div id="puzzleInstruction"></div>
   <div id="puzzle"></div>
-  <div id="puzzleMessage">🎉 Congrats! Here's your hidden message! 🎉</div>
 
-  <!-- Final reveal -->
   <div id="finalReveal">
     <img id="finalImage" src="IMAGES/21.jpg"/>
     <div id="finalMessage">🎉 Congrats! Here's your hidden message! 🎉</div>
@@ -164,97 +188,177 @@
 </div>
 
 <script>
-/* Keyboard & Countdown */
-const rows = { row1:['Q','W','E','R','T','Y','U','I','O','P'], row2:['A','S','D','F','G','H','J','K','L'], row3:['-','Z','X','C','V','B','N','M','Del'] };
-const clickable = ['Y','E','S'], special=['N','O'];
-const boxes = [document.getElementById('box1'), document.getElementById('box2'), document.getElementById('box3')];
-const message = document.getElementById('message'), keyboardDiv=document.getElementById('keyboard');
-const mainContainer=document.getElementById('mainContainer'), shortMessage=document.getElementById('shortMessage');
-const loading=document.getElementById('loading'), countdownEl=document.getElementById('countdown');
-const proceedBtn=document.getElementById('proceedBtn');
-let input=[], specialPressed={ N:false, O:false };
 
-function createRow(rowId, letters){
-  const rowDiv=document.getElementById(rowId);
+/* ========== CAT LOADING 5→1 ========== */
+
+const countdownEl=document.getElementById("countdown");
+const pop=document.getElementById("popSound");
+let count=5;
+
+let heartInterval=setInterval(()=>{
+  const heart=document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML="❤";
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.animationDuration=(4+Math.random()*2)+"s";
+  loadingScreen.appendChild(heart);
+  setTimeout(()=>heart.remove(),6000);
+},600);
+
+setTimeout(()=>{
+  countdownEl.classList.add("show");
+  countdownEl.innerText="In "+count;
+  pop.play();
+
+  const interval=setInterval(()=>{
+    countdownEl.classList.remove("show");
+    setTimeout(()=>{
+      count--;
+      if(count>0){
+        countdownEl.innerText=count;
+        countdownEl.classList.add("show");
+        pop.currentTime=0; pop.play();
+      }else{
+        clearInterval(interval);
+        clearInterval(heartInterval);
+        loadingScreen.style.opacity="0";
+        setTimeout(()=>{
+          loadingScreen.style.display="none";
+          mainContainer.style.display="flex";
+        },800);
+      }
+    },300);
+  },1000);
+},2500);
+
+/* ========== ORIGINAL KEYBOARD + PUZZLE LOGIC ========== */
+
+const rows={row1:['Q','W','E','R','T','Y','U','I','O','P'],row2:['A','S','D','F','G','H','J','K','L'],row3:['-','Z','X','C','V','B','N','M','Del']};
+const clickable=['Y','E','S'],special=['N','O'];
+const boxes=[box1,box2,box3];
+let input=[],specialPressed={N:false,O:false};
+
+function createRow(id,letters){
+  const row=document.getElementById(id);
   letters.forEach(letter=>{
-    const key=document.createElement('div'); key.classList.add('key'); key.textContent=letter;
-    if(clickable.includes(letter)){ key.classList.add('highlight'); key.addEventListener('click', ()=>handleInput(letter,'#d60000')); }
-    else if(special.includes(letter)){ key.classList.add('special'); key.addEventListener('click', ()=>handleSpecial(letter,'#ff6600')); }
-    else if(letter==='Del'){ key.classList.add('special'); key.addEventListener('click', deleteInput); }
-    rowDiv.appendChild(key);
+    const key=document.createElement("div");
+    key.classList.add("key");
+    key.textContent=letter;
+    if(clickable.includes(letter)){key.classList.add("highlight");key.onclick=()=>handleInput(letter);}
+    else if(special.includes(letter)){key.classList.add("special");key.onclick=()=>handleSpecial(letter);}
+    else if(letter==="Del"){key.classList.add("special");key.onclick=deleteInput;}
+    row.appendChild(key);
   });
 }
-function handleInput(letter,color){ if(input.length<3){ input.push({letter,color}); updateBoxes(); checkInput(); } }
-function handleSpecial(letter,color){ if(input.length<3){ input.push({letter,color}); updateBoxes(); specialPressed[letter]=true; if(specialPressed['N'] && specialPressed['O']){ message.textContent="PLEASE!! 🙏"; } } }
-function deleteInput(){ if(input.length>0){ const removed=input.pop(); updateBoxes(); if(special.includes(removed.letter)){ specialPressed[removed.letter]=false; } message.textContent=""; } }
-function updateBoxes(){ for(let i=0;i<3;i++){ if(input[i]){ boxes[i].textContent=input[i].letter; boxes[i].style.backgroundColor=input[i].color; } else { boxes[i].textContent=''; boxes[i].style.backgroundColor='#fff'; } } }
-function checkInput(){ 
-  if(input.length===3 && input.map(x=>x.letter).join('')==="YES"){
-    keyboardDiv.classList.add('hidden'); shortMessage.style.display="block"; loading.style.display="block";
-    let countdown=8; countdownEl.textContent=countdown;
+
+function handleInput(letter){
+  if(input.length<3){input.push(letter);updateBoxes();checkInput();}
+}
+
+function handleSpecial(letter){
+  if(input.length<3){
+    input.push(letter);
+    specialPressed[letter]=true;
+    updateBoxes();
+    if(specialPressed.N&&specialPressed.O){message.textContent="PLEASE!! 🙏";}
+  }
+}
+
+function deleteInput(){
+  if(input.length>0){
+    const removed=input.pop();
+    if(special.includes(removed)){specialPressed[removed]=false;message.textContent="";}
+    updateBoxes();
+  }
+}
+
+function updateBoxes(){
+  boxes.forEach((box,i)=>{
+    box.textContent=input[i]||"";
+    box.style.backgroundColor=input[i]?"#d60000":"#fff";
+  });
+}
+
+function checkInput(){
+  if(input.join("")==="YES"){
+    keyboard.classList.add("hidden");
+    shortMessage.style.display="block";
+    loading.style.display="block";
+
+    let c=8;
     const interval=setInterval(()=>{
-      countdown--; countdownEl.textContent=countdown;
-      if(countdown<=0){ clearInterval(interval); proceedBtn.style.display="block"; }
+      c--;
+      countdown8.textContent=c;
+      if(c<=0){clearInterval(interval);proceedBtn.style.display="block";}
     },1000);
   }
 }
-createRow('row1',rows.row1); createRow('row2',rows.row2); createRow('row3',rows.row3);
 
-proceedBtn.addEventListener('click', ()=>{
-  mainContainer.style.display='none';
-  document.getElementById('puzzleContainer').style.display='flex';
+createRow("row1",rows.row1);
+createRow("row2",rows.row2);
+createRow("row3",rows.row3);
+
+/* ========== PROCEED TO PUZZLE ========== */
+
+proceedBtn.onclick=()=>{
+  mainContainer.style.display="none";
+  puzzleContainer.style.display="flex";
   initPuzzle();
-});
+};
 
-/* Puzzle Logic */
-const puzzle=document.getElementById('puzzle'), puzzleMessage=document.getElementById('puzzleMessage');
-const puzzleInstruction=document.getElementById('puzzleInstruction'), gridSize=3, imageUrl='IMAGES/21.jpg';
-const finalReveal=document.getElementById('finalReveal'), nextBtn=document.getElementById('nextBtn');
+/* ========== ORIGINAL PUZZLE ========== */
+
+const puzzle=document.getElementById('puzzle');
+const puzzleInstruction=document.getElementById('puzzleInstruction');
+const finalReveal=document.getElementById('finalReveal');
+const nextBtn=document.getElementById('nextBtn');
+const gridSize=3,imageUrl='IMAGES/21.jpg';
 let tiles=[];
 
 function initPuzzle(){
-  puzzleInstruction.textContent=/Mobi|Android/i.test(navigator.userAgent) ? 
-    "On mobile: Hold the piece then drag it to swap." : "On desktop: Click and drag the piece to swap.";
+  puzzleInstruction.textContent="Drag pieces to solve.";
   puzzle.innerHTML=''; tiles=[];
-  for(let row=0;row<gridSize;row++){
-    for(let col=0;col<gridSize;col++){
-      let tile=document.createElement('div'); tile.classList.add('tile');
-      tile.style.backgroundImage=`url(${imageUrl})`; tile.style.backgroundPosition=`-${col*100}px -${row*100}px`;
-      tile.dataset.correct=row*gridSize+col; tile.dataset.current=row*gridSize+col; tile.draggable=true;
-      puzzle.appendChild(tile); tiles.push(tile);
+  for(let row=0;row<3;row++){
+    for(let col=0;col<3;col++){
+      let tile=document.createElement('div');
+      tile.classList.add('tile');
+      tile.style.backgroundImage=`url(${imageUrl})`;
+      tile.style.backgroundPosition=`-${col*100}px -${row*100}px`;
+      tile.dataset.correct=row*3+col;
+      tile.dataset.current=row*3+col;
+      tile.draggable=true;
+      puzzle.appendChild(tile);
+      tiles.push(tile);
     }
   }
-  for(let i=tiles.length-1;i>0;i--){ let j=Math.floor(Math.random()* (i+1));
-    [tiles[i].dataset.current,tiles[j].dataset.current]=[tiles[j].dataset.current,tiles[i].dataset.current];
-    [tiles[i].style.backgroundPosition,tiles[j].style.backgroundPosition]=[tiles[j].style.backgroundPosition,tiles[i].style.backgroundPosition];
-  }
+
+  tiles.sort(()=>Math.random()-0.5);
 
   let dragged=null;
   tiles.forEach(tile=>{
-    tile.addEventListener('dragstart',()=>{ dragged=tile; tile.classList.add('dragging'); });
-    tile.addEventListener('dragend',()=>{ tile.classList.remove('dragging'); checkPuzzle(); });
+    tile.addEventListener('dragstart',()=>{dragged=tile;});
     tile.addEventListener('dragover',e=>e.preventDefault());
-    tile.addEventListener('drop',e=>{ e.preventDefault(); if(dragged===tile) return;
-      let temp=dragged.dataset.current; dragged.dataset.current=tile.dataset.current; tile.dataset.current=temp;
-      let tempPos=dragged.style.backgroundPosition; dragged.style.backgroundPosition=tile.style.backgroundPosition;
-      tile.style.backgroundPosition=tempPos;
+    tile.addEventListener('drop',()=>{
+      if(dragged!==tile){
+        let temp=dragged.style.backgroundPosition;
+        dragged.style.backgroundPosition=tile.style.backgroundPosition;
+        tile.style.backgroundPosition=temp;
+        checkPuzzle();
+      }
     });
   });
 }
 
 function checkPuzzle(){
-  if(tiles.every(tile=>tile.dataset.current===tile.dataset.correct)){
-    // Flip tiles one by one
-    tiles.forEach((tile,index)=>{ setTimeout(()=>{ tile.classList.add('flip'); },index*200); });
-    setTimeout(()=>{
-      puzzle.style.display='none'; puzzleInstruction.style.display='none'; finalReveal.style.display='flex';
-      finalReveal.style.flexDirection='column'; finalReveal.style.alignItems='center';
-    }, tiles.length*200+600);
+  const correct=tiles.every((tile,i)=>tile.style.backgroundPosition===`-${(i%3)*100}px -${Math.floor(i/3)*100}px`);
+  if(correct){
+    tiles.forEach((tile,i)=>setTimeout(()=>tile.classList.add("flip"),i*200));
+    setTimeout(()=>{puzzle.style.display="none";finalReveal.style.display="flex";},2000);
   }
 }
 
-nextBtn.addEventListener('click',()=>{ alert("Proceeding to the next page..."); });
-</script>
+nextBtn.onclick=()=>alert("Proceeding to the next page...");
 
+</script>
 </body>
 </html>
