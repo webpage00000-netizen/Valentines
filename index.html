@@ -260,13 +260,35 @@ function checkPuzzle(){
   if(solved){
     // Flip tiles sequentially
     tiles.forEach((tile,index)=>{ setTimeout(()=>{ tile.classList.add('flip'); }, index*200); });
+    
+    // After all flips, show grey box and "tap me"
     setTimeout(()=>{
-      puzzle.style.display='none'; puzzleInstruction.style.display='none';
-      finalReveal.style.display='flex';
-      finalReveal.style.flexDirection='column'; finalReveal.style.alignItems='center';
+      puzzle.style.display='none';
+      puzzleInstruction.style.display='none';
+      // Show grey box
+      const grey = document.getElementById('greyReveal');
+      const tapText = document.getElementById('tapTextFinal');
+      grey.style.display='flex';
+      tapText.style.display='block';
     }, tiles.length*200 + 600);
   }
 }
+
+// Tap logic for grey box
+const greyBox = document.getElementById('greyReveal');
+const tapText = document.getElementById('tapTextFinal');
+const shortMsg = document.getElementById('shortMessageFinal');
+const nextBtn = document.getElementById('nextAfterTap');
+
+greyBox.addEventListener('click', ()=>{
+  shortMsg.style.display='block';
+  nextBtn.style.display='inline-block';
+  tapText.style.display='none';
+});
+
+nextBtn.addEventListener('click', ()=>{
+  alert("Proceed to the next page...");
+});
 
 
 /* ===== POLAROID TAP ===== */
