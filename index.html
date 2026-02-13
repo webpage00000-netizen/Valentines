@@ -48,7 +48,7 @@
       opacity: 1;
     }
     100% {
-      transform: translateY(-400px) scale(1.5);
+      transform: translateY(-100vh) scale(1.5);
       opacity: 0;
     }
   }
@@ -87,13 +87,16 @@
     font-size: clamp(20px, 6vw, 24px); font-weight: bold;
     background: #fff; color: #fff;
   }
-  .keyboard { display: flex; flex-direction: column; gap: 10px; width: 100%; transition: all 0.5s ease; }
+  .keyboard { display: flex; flex-direction: column; gap: 10px; width: 100%; transition: all 0.7s ease; }
   .keyboard.hidden { 
     opacity: 0; 
     pointer-events: none; 
     max-height: 0;
     overflow: hidden;
     margin: 0;
+  }
+  h1, .input-boxes {
+    transition: all 0.7s ease;
   }
   .row { display: flex; justify-content: center; gap: 5px; }
   .key {
@@ -196,6 +199,7 @@
 </div>
 
 <audio id="popSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+<audio id="bgMusic" src="./IMAGES/music.mp3" loop></audio>
 
 <div class="container" id="mainContainer" style="display:none;">
   <h1>Will you be my Valentine?</h1>
@@ -248,14 +252,15 @@ setTimeout(() => {
       } else {
         clearInterval(interval);
         
-        // Heart explosion
+        // Heart explosion from bottom
         for (let i = 0; i < 30; i++) {
           setTimeout(() => {
             const heart = document.createElement('div');
             heart.classList.add('heart');
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + '%';
-            heart.style.top = '50%';
+            heart.style.bottom = '0';
+            heart.style.top = 'auto';
             heart.style.animationDelay = Math.random() * 0.3 + 's';
             loadingScreen.appendChild(heart);
             
@@ -268,6 +273,10 @@ setTimeout(() => {
           setTimeout(() => {
             loadingScreen.style.display = "none";
             document.getElementById("mainContainer").style.display = "flex";
+            
+            // Play background music
+            const bgMusic = document.getElementById("bgMusic");
+            bgMusic.play().catch(err => console.log("Music autoplay blocked:", err));
           }, 800);
         }, 1500);
       }
