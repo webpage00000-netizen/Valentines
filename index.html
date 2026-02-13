@@ -13,7 +13,7 @@ body{
   display:flex; flex-direction:column; align-items:center;
   padding:20px; min-height:100vh;
 }
-/* ===== Loading Screen ===== */
+/* ===== Loading ===== */
 #loadingScreen{
   position:fixed; inset:0;
   background:#f9fafc;
@@ -76,7 +76,7 @@ h1{text-align:center;font-family:'Fredoka One',cursive;color:#d60000;margin-bott
 #puzzleContainer{display:none;flex-direction:column;align-items:center;}
 #puzzleInstruction{margin-bottom:10px;text-align:center;font-size:16px;color:#333;}
 #puzzle{display:grid;grid-template-columns:repeat(3,100px);grid-template-rows:repeat(3,100px);gap:5px;margin-top:20px;}
-.tile{width:100px;height:100px;border-radius:8px;perspective:1000px;cursor:grab;}
+.tile{width:100px;height:100px;perspective:600px;}
 .tile-inner{width:100%;height:100%;transition:0.6s;transform-style: preserve-3d;position:relative;}
 .tile.flip .tile-inner{transform:rotateY(180deg);}
 .tile-front, .tile-back{
@@ -129,7 +129,6 @@ const loadingScreen=document.getElementById("loadingScreen");
 const countdownEl=document.getElementById("countdown");
 const pop=document.getElementById("popSound");
 let count=5;
-
 setTimeout(()=>{
   countdownEl.classList.add("show");
   countdownEl.innerText="In "+count;
@@ -156,7 +155,6 @@ const rows={row1:['Q','W','E','R','T','Y','U','I','O','P'],row2:['A','S','D','F'
 const clickable=['Y','E','S'],special=['N','O'];
 const boxes=[box1,box2,box3];
 let input=[],specialPressed={N:false,O:false};
-
 function createRow(id,letters){
   const row=document.getElementById(id);
   letters.forEach(letter=>{
@@ -180,7 +178,6 @@ function checkInput(){
   }
 }
 createRow("row1",rows.row1); createRow("row2",rows.row2); createRow("row3",rows.row3);
-
 proceedBtn.onclick=()=>{mainContainer.style.display="none";puzzleContainer.style.display="flex";initPuzzle();};
 
 /* ===== PUZZLE ===== */
@@ -189,7 +186,6 @@ const puzzleInstruction=document.getElementById('puzzleInstruction');
 const gridSize=3;
 const imageUrl='IMAGES/21.jpg';
 let tiles=[];
-
 function initPuzzle(){
   puzzleInstruction.textContent="Drag pieces to solve the puzzle!";
   puzzle.innerHTML=''; tiles=[];
@@ -197,17 +193,13 @@ function initPuzzle(){
     for(let col=0; col<gridSize; col++){
       const tile=document.createElement('div'); tile.classList.add('tile');
       const inner=document.createElement('div'); inner.classList.add('tile-inner');
-
       const front=document.createElement('div'); front.classList.add('tile-front');
       front.style.backgroundImage=`url(${imageUrl})`;
       front.style.backgroundPosition=`-${col*100}px -${row*100}px`;
-
       const back=document.createElement('div'); back.classList.add('tile-back'); back.textContent="♥";
-
-      inner.appendChild(front); inner.appendChild(back);
-      tile.appendChild(inner); puzzle.appendChild(tile);
-
-      tiles.push({tile, front, back, inner, correctCol:col, correctRow:row});
+      inner.appendChild(front); inner.appendChild(back); tile.appendChild(inner);
+      puzzle.appendChild(tile);
+      tiles.push({tile, inner, front, back, correctCol:col, correctRow:row});
     }
   }
 
@@ -219,6 +211,7 @@ function initPuzzle(){
     t.front.style.backgroundPosition=`-${col*100}px -${row*100}px`;
   });
 
+  // Drag & Drop
   let dragged=null;
   tiles.forEach(t=>{
     const tile=t.tile;
@@ -246,6 +239,5 @@ function checkPuzzle(){
   }
 }
 </script>
-
 </body>
 </html>
