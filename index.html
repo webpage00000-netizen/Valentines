@@ -211,6 +211,52 @@
   #musicPlayer.show {
     opacity: 1;
   }
+  #playHint {
+    position: absolute;
+    bottom: 100%;
+    left: 20px;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #ff6fa5, #d60000);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 4px 20px rgba(214, 0, 0, 0.3);
+    opacity: 0;
+    animation: hintFadeInOut 3s ease forwards;
+    pointer-events: none;
+  }
+  #playHint::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 30px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #d60000;
+  }
+  @keyframes hintFadeInOut {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    10% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    90% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+  }
   #musicProgress {
     position: absolute;
     bottom: 0;
@@ -296,6 +342,7 @@
 <!-- Floating Music Player -->
 <div id="musicPlayer">
   <div id="musicProgress"></div>
+  <div id="playHint">👆 Play the music!</div>
   <button id="playPauseBtn">
     <svg id="playIcon" width="24" height="24" viewBox="0 0 24 24" fill="white">
       <path d="M8 5v14l11-7z"/>
