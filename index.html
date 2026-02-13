@@ -8,67 +8,24 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 
-/* ========== LOADING SCREEN ========== */
-#loadingScreen{
-  position:fixed; inset:0;
-  background:#f9fafc;
-  display:flex; flex-direction:column;
-  justify-content:center; align-items:center;
-  z-index:9999; font-family:'Montserrat',sans-serif;
-  overflow:hidden; transition:opacity 0.8s ease;
-}
-.cat-wrapper{
-  padding:12px;
-  border-radius:22px;
-  background:white;
-  box-shadow:0 10px 25px rgba(0,0,0,0.06);
-  margin-bottom:20px;
-}
-.cat{
-  width:170px;
-  max-width:60vw;
-  border-radius:18px;
-  border:1.5px solid #ffd6e8;
-}
+/* ===== LOADING SCREEN ===== */
+#loadingScreen{position:fixed;inset:0;background:#f9fafc;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;font-family:'Montserrat',sans-serif;overflow:hidden;transition:opacity 0.8s ease;}
+.cat-wrapper{padding:12px;border-radius:22px;background:white;box-shadow:0 10px 25px rgba(0,0,0,0.06);margin-bottom:20px;}
+.cat{width:170px;max-width:60vw;border-radius:18px;border:1.5px solid #ffd6e8;}
 .loading-text{font-size:18px;color:#666;}
 .countdown{font-size:55px;font-weight:700;color:#ff6fa5;margin-top:15px;opacity:0;transition:0.4s;}
 .show{opacity:1;transform:scale(1.1);}
-.heart{position:absolute;bottom:-20px;font-size:20px;color:#ff9ecf;animation:floatUp linear forwards;}
-@keyframes floatUp{0%{transform:translateY(0);opacity:0.8;}100%{transform:translateY(-110vh);opacity:0;}}
 
-/* ========== MAIN PAGE ========== */
-body{
-  font-family:'Montserrat', sans-serif;
-  background: linear-gradient(135deg,#ffe6e6,#fff0f5);
-  display:flex; flex-direction:column;
-  align-items:center; padding:20px; min-height:100vh;
-}
-.container{
-  display:flex; flex-direction:column; align-items:center;
-  width:100%; max-width:450px; transition:1.5s ease;
-}
-h1{
-  font-family:'Fredoka One',cursive;
-  color:#d60000;
-  font-size:2em;
-  text-align:center;
-  margin-bottom:20px;
-}
+/* ===== MAIN PAGE ===== */
+body{font-family:'Montserrat',sans-serif;background:linear-gradient(135deg,#ffe6e6,#fff0f5);display:flex;flex-direction:column;align-items:center;padding:20px;min-height:100vh;}
+.container{display:flex;flex-direction:column;align-items:center;width:100%;max-width:450px;transition:1.5s ease;}
+h1{font-family:'Fredoka One',cursive;color:#d60000;font-size:2em;text-align:center;margin-bottom:20px;}
 .input-boxes{display:flex;gap:10px;margin-bottom:15px;}
-.box{
-  width:60px;height:60px;border:3px solid #d60000;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;font-weight:bold;background:#fff;color:#fff;
-}
+.box{width:60px;height:60px;border:3px solid #d60000;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;background:#fff;color:#fff;}
 .keyboard{display:flex;flex-direction:column;gap:10px;width:100%;}
 .keyboard.hidden{opacity:0;pointer-events:none;}
 .row{display:flex;justify-content:center;gap:5px;}
-.key{
-  flex:1;height:50px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  background:#ccc;color:white;font-weight:bold;
-  cursor:not-allowed;transition:0.2s;
-}
+.key{flex:1;height:50px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#ccc;color:white;font-weight:bold;cursor:not-allowed;transition:0.2s;}
 .key.highlight{background:#d60000;cursor:pointer;}
 .key.highlight:hover{transform:scale(1.1);}
 .key.special{background:#ff6600;cursor:pointer;}
@@ -83,7 +40,7 @@ h1{
 #proceedBtn{margin-top:20px;padding:10px 20px;font-size:18px;background:#d60000;color:white;border:none;border-radius:10px;cursor:pointer;display:none;transition:0.2s;}
 #proceedBtn:hover{background:#ff1a1a;transform:scale(1.05);}
 
-/* ========== PUZZLE ========== */
+/* ===== PUZZLE ===== */
 #puzzleContainer{display:none;flex-direction:column;align-items:center;}
 #puzzleInstruction{margin-bottom:10px;text-align:center;font-size:16px;color:#333;}
 #puzzle{display:grid;grid-template-columns:repeat(3,100px);grid-template-rows:repeat(3,100px);gap:5px;margin-bottom:20px;}
@@ -91,12 +48,18 @@ h1{
 .tile.dragging{opacity:0.6;transform:scale(1.05);}
 .tile.flip{transform:rotateY(180deg);transition:0.6s ease;}
 
-/* ========== POLAROID ========== */
-#polaroidContainer{display:none; flex-direction:column; align-items:center; margin-top:20px; cursor:pointer;}
-#polaroid{width:300px; height:300px; border-radius:12px; background:url('IMAGES/21.jpg') center/cover no-repeat; box-shadow:0 8px 15px rgba(0,0,0,0.3); transition:transform 0.6s; transform-style: preserve-3d; position:relative;}
-#polaroidBack{position:absolute; inset:0; background:white; border-radius:12px; backface-visibility:hidden; display:flex; align-items:center; justify-content:center; font-size:20px; color:#d60000; font-weight:bold; transform:rotateY(180deg);}
-#tapText{margin-top:10px; font-size:16px; color:#333;}
-#nextAfterFlip{display:none; margin-top:15px; padding:10px 20px; border:none; border-radius:10px; background:#d60000; color:white; cursor:pointer;}
+/* ===== GREY BOX REVEAL ===== */
+#greyReveal{display:none;width:200px;height:200px;background:grey;align-items:center;justify-content:center;border-radius:12px;margin-bottom:10px;cursor:pointer;}
+#tapTextFinal{display:none;margin-bottom:10px;color:#333;font-size:16px;text-align:center;}
+#shortMessageFinal{display:none;margin-bottom:10px;font-size:16px;color:#d60000;text-align:center;}
+#nextAfterTap{display:none;padding:10px 20px;background:#d60000;color:white;border:none;border-radius:10px;cursor:pointer;}
+
+/* ===== POLAROID ===== */
+#polaroidContainer{display:none;flex-direction:column;align-items:center;margin-top:20px;cursor:pointer;}
+#polaroid{width:300px;height:300px;border-radius:12px;background:url('IMAGES/21.jpg') center/cover no-repeat;box-shadow:0 8px 15px rgba(0,0,0,0.3);transition:transform 0.6s;transform-style: preserve-3d;position:relative;}
+#polaroidBack{position:absolute;inset:0;background:white;border-radius:12px;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;font-size:20px;color:#d60000;font-weight:bold;transform:rotateY(180deg);}
+#tapText{margin-top:10px;font-size:16px;color:#333;}
+#nextAfterFlip{display:none;margin-top:15px;padding:10px 20px;border:none;border-radius:10px;background:#d60000;color:white;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -129,74 +92,54 @@ h1{
   <button id="proceedBtn">Proceed</button>
 </div>
 
-<!-- PUZZLE + POLAROID -->
+<!-- PUZZLE -->
 <div id="puzzleContainer">
   <h1>Complete the Puzzle!</h1>
   <div id="puzzleInstruction"></div>
   <div id="puzzle"></div>
 
-  <div id="polaroidContainer">
-    <div id="polaroid">
-      <div id="polaroidBack">Your short message</div>
-    </div>
-    <div id="tapText">Tap the photo</div>
-    <button id="nextAfterFlip">Next</button>
-  </div>
+  <div id="greyReveal"></div>
+  <div id="tapTextFinal">Tap me ↑</div>
+  <div id="shortMessageFinal">Your short message</div>
+  <button id="nextAfterTap">Next</button>
 </div>
 
-<!-- GREY BOX FOR PUZZLE REVEAL -->
-<div id="greyReveal" style="display:none; width:200px; height:200px; background:grey; align-items:center; justify-content:center;"></div>
-<div id="tapTextFinal" style="display:none;">Tap me ↑</div>
-<div id="shortMessageFinal" style="display:none;">Your short message</div>
-<button id="nextAfterTap" style="display:none;">Next</button>
-
-
 <script>
-/* ===== LOADING COUNTDOWN ===== */
-const loadingScreen = document.getElementById("loadingScreen");
-const countdownEl = document.getElementById("countdown");
-const pop = document.getElementById("popSound");
-let count = 5;
-
-// Start countdown immediately after 1.5s
-setTimeout(() => {
-  function tick() {
-    if (count > 0) {
-      countdownEl.textContent = "In " + count;
-      countdownEl.classList.add("show");
-      pop.currentTime = 0; 
-      pop.play();
+// ===== LOADING =====
+const loadingScreen=document.getElementById("loadingScreen");
+const countdownEl=document.getElementById("countdown");
+const pop=document.getElementById("popSound");
+let count=5;
+setTimeout(()=>{
+  countdownEl.classList.add("show");
+  countdownEl.innerText="In "+count;
+  pop.play();
+  const interval=setInterval(()=>{
+    countdownEl.classList.remove("show");
+    setTimeout(()=>{
       count--;
-      setTimeout(() => {
-        countdownEl.classList.remove("show");
-        setTimeout(tick, 500); // wait 0.5s then next tick
-      }, 700); // keep number visible 0.7s
-    } else {
-      // Done
-      loadingScreen.style.opacity = "0";
-      setTimeout(() => {
-        loadingScreen.style.display = "none";
-        document.getElementById("mainContainer").style.display = "flex";
-      }, 800);
-    }
-  }
-  tick();
-}, 1500);
+      if(count>0){
+        countdownEl.innerText="In "+count;
+        countdownEl.classList.add("show");
+        pop.currentTime=0; pop.play();
+      } else {
+        clearInterval(interval);
+        loadingScreen.style.opacity="0";
+        setTimeout(()=>{loadingScreen.style.display="none"; document.getElementById("mainContainer").style.display="flex";},800);
+      }
+    },300);
+  },1000);
+},1500);
 
-
-/* ===== KEYBOARD ===== */
+// ===== KEYBOARD =====
+const box1=document.getElementById('box1');
+const box2=document.getElementById('box2');
+const box3=document.getElementById('box3');
+const boxes=[box1,box2,box3];
 const rows={row1:['Q','W','E','R','T','Y','U','I','O','P'],row2:['A','S','D','F','G','H','J','K','L'],row3:['-','Z','X','C','V','B','N','M','Del']};
 const clickable=['Y','E','S'],special=['N','O'];
-// ✅ Fix: get boxes properly
-const boxes = [
-  document.getElementById('box1'),
-  document.getElementById('box2'),
-  document.getElementById('box3')
-];
-
-let input = [];
-let specialPressed = { N: false, O: false };
-
+const message=document.getElementById('message');
+let input=[],specialPressed={N:false,O:false};
 function createRow(id,letters){
   const row=document.getElementById(id);
   letters.forEach(letter=>{
@@ -212,104 +155,76 @@ function handleInput(letter){if(input.length<3){input.push(letter);updateBoxes()
 function handleSpecial(letter){if(input.length<3){input.push(letter);specialPressed[letter]=true;updateBoxes();if(specialPressed.N && specialPressed.O) message.textContent="PLEASE!! 🙏";}}
 function deleteInput(){if(input.length>0){const removed=input.pop();if(special.includes(removed)){specialPressed[removed]=false;message.textContent="";}updateBoxes();}}
 function updateBoxes(){boxes.forEach((box,i)=>{box.textContent=input[i]||"";box.style.backgroundColor=input[i]?"#d60000":"#fff";});}
-function checkInput(){if(input.join("")==="YES"){keyboard.classList.add("hidden");shortMessage.style.display="block";loading.style.display="block";let c=8; const interval=setInterval(()=>{c--;countdown8.textContent=c;if(c<=0){clearInterval(interval);proceedBtn.style.display="block";}},1000);}}
+function checkInput(){if(input.join("")==="YES"){document.getElementById('keyboard').classList.add("hidden");document.getElementById('shortMessage').style.display="block";document.getElementById('loading').style.display="block";let c=8; const interval=setInterval(()=>{c--;document.getElementById('countdown8').textContent=c;if(c<=0){clearInterval(interval);document.getElementById('proceedBtn').style.display="block";}},1000);}}
 createRow("row1",rows.row1); createRow("row2",rows.row2); createRow("row3",rows.row3);
+document.getElementById('proceedBtn').onclick=()=>{document.getElementById('mainContainer').style.display="none";document.getElementById('puzzleContainer').style.display="flex";initPuzzle();};
 
-proceedBtn.onclick=()=>{mainContainer.style.display="none";puzzleContainer.style.display="flex";initPuzzle();};
-
-/* ===== PUZZLE ===== */
+// ===== PUZZLE =====
 const puzzle=document.getElementById('puzzle');
 const puzzleInstruction=document.getElementById('puzzleInstruction');
-const polaroidContainer=document.getElementById('polaroidContainer');
-const polaroid=document.getElementById('polaroid');
-const polaroidBack=document.getElementById('polaroidBack');
-const tapText=document.getElementById('tapText');
-const nextAfterFlip=document.getElementById('nextAfterFlip');
+const greyBox=document.getElementById('greyReveal');
+const tapText=document.getElementById('tapTextFinal');
+const shortMsg=document.getElementById('shortMessageFinal');
+const nextBtn=document.getElementById('nextAfterTap');
 const gridSize=3;
 const imageUrl='IMAGES/21.jpg';
 let tiles=[];
 
-function shuffle(array){for(let i=array.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[array[i],array[j]]=[array[j],array[i]];}return array;}
-
 function initPuzzle(){
-  puzzleInstruction.textContent=/Mobi|Android/i.test(navigator.userAgent) ? 
-    "On mobile: Hold the piece then drag it to swap." : "On desktop: Click and drag the piece to swap.";
+  puzzleInstruction.textContent="Drag pieces to solve.";
   puzzle.innerHTML=''; tiles=[];
-  for(let row=0;row<gridSize;row++){
-    for(let col=0;col<gridSize;col++){
-      let tile=document.createElement('div'); tile.classList.add('tile');
+  for(let row=0; row<gridSize; row++){
+    for(let col=0; col<gridSize; col++){
+      let tile=document.createElement('div');
+      tile.classList.add('tile');
       tile.style.backgroundImage=`url(${imageUrl})`;
       tile.style.backgroundPosition=`-${col*100}px -${row*100}px`;
-      tile.dataset.correct=row*gridSize+col; tile.dataset.current=row*gridSize+col;
+      tile.dataset.correct=row*gridSize+col;
+      tile.dataset.current=row*gridSize+col;
       tile.draggable=true;
-      puzzle.appendChild(tile); tiles.push(tile);
+      puzzle.appendChild(tile);
+      tiles.push(tile);
     }
   }
-
-  // Properly shuffle tiles visually and dataset.current
-  let currentPositions = tiles.map((t,i)=>i);
-  currentPositions = currentPositions.sort(()=>Math.random()-0.5);
-  tiles.forEach((tile,i)=>{
-    let pos = currentPositions[i];
-    let correctCol = pos % gridSize;
-    let correctRow = Math.floor(pos / gridSize);
-    tile.dataset.current = pos;
-    tile.style.backgroundPosition = `-${correctCol*100}px -${correctRow*100}px`;
-  });
+  // shuffle DOM
+  tiles.sort(()=>Math.random()-0.5).forEach(t=>puzzle.appendChild(t));
 
   let dragged=null;
   tiles.forEach(tile=>{
-    tile.addEventListener('dragstart',()=>{ dragged=tile; tile.classList.add('dragging'); });
-    tile.addEventListener('dragend',()=>{ tile.classList.remove('dragging'); checkPuzzle(); });
+    tile.addEventListener('dragstart',()=>{dragged=tile;});
     tile.addEventListener('dragover',e=>e.preventDefault());
-    tile.addEventListener('drop',e=>{ e.preventDefault(); if(dragged===tile) return;
-      // Swap dataset.current and backgroundPosition
-      let temp = dragged.dataset.current;
-      dragged.dataset.current = tile.dataset.current;
-      tile.dataset.current = temp;
-      let tempPos = dragged.style.backgroundPosition;
-      dragged.style.backgroundPosition = tile.style.backgroundPosition;
-      tile.style.backgroundPosition = tempPos;
+    tile.addEventListener('drop',()=>{
+      if(dragged!==tile){
+        let temp=dragged.style.backgroundPosition;
+        dragged.style.backgroundPosition=tile.style.backgroundPosition;
+        tile.style.backgroundPosition=temp;
+        checkPuzzle();
+      }
     });
   });
 }
 
 function checkPuzzle(){
-  const solved = tiles.every(tile => tile.dataset.current === tile.dataset.correct);
-  if(solved){
-    // Flip tiles sequentially
-    tiles.forEach((tile,index)=>{ setTimeout(()=>{ tile.classList.add('flip'); }, index*200); });
-    
-    // After all flips, show grey box and "tap me"
+  const correct=tiles.every((tile,i)=>tile.style.backgroundPosition===`-${i%3*100}px -${Math.floor(i/3)*100}px`);
+  if(correct){
+    tiles.forEach((tile,i)=>setTimeout(()=>tile.classList.add("flip"), i*150));
     setTimeout(()=>{
       puzzle.style.display='none';
       puzzleInstruction.style.display='none';
-      // Show grey box
-      const grey = document.getElementById('greyReveal');
-      const tapText = document.getElementById('tapTextFinal');
-      grey.style.display='flex';
+      greyBox.style.display='flex';
       tapText.style.display='block';
-    }, tiles.length*200 + 600);
+    }, tiles.length*150 + 300);
   }
 }
 
-// Tap logic for grey box
-const greyBox = document.getElementById('greyReveal');
-const tapText = document.getElementById('tapTextFinal');
-const shortMsg = document.getElementById('shortMessageFinal');
-const nextBtn = document.getElementById('nextAfterTap');
-
-greyBox.addEventListener('click', ()=>{
+// ===== GREY BOX TAP =====
+greyBox.addEventListener('click',()=>{
+  tapText.style.display='none';
   shortMsg.style.display='block';
   nextBtn.style.display='inline-block';
-  tapText.style.display='none';
 });
 
-nextBtn.addEventListener('click', ()=>{
-  alert("Proceed to the next page...");
-});
-
-nextAfterFlip.addEventListener('click',()=>alert("Proceed to the next page..."));
+nextBtn.addEventListener('click',()=>alert("Proceed to the next page..."));
 </script>
 </body>
 </html>
