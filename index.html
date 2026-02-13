@@ -58,9 +58,9 @@
   .keyboard.hidden { opacity: 0; pointer-events: none; }
 
   .row { display: flex; justify-content: center; gap: 5px; flex-wrap: nowrap; }
-  #row1 .key { flex: 0 0 calc((100% - 9*5px)/10); }
-  #row2 .key { flex: 0 0 calc((100% - 8*5px)/9); }
-  #row3 .key { flex: 0 0 calc((100% - 8*5px)/9); }
+
+  /* Desktop: evenly spaced keys */
+  #row1 .key, #row2 .key, #row3 .key { flex: 1 1 0; }
 
   .key {
     height: 50px;
@@ -109,7 +109,11 @@
   #finalMessage { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center; color:#fff; font-size:20px; font-weight:bold; text-shadow:1px 1px 5px #000; }
   #nextBtn { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); padding:10px 20px; border:none; border-radius:10px; background-color:#d60000; color:white; font-size:16px; cursor:pointer; }
 
+  /* Mobile overrides for keyboard shrink */
   @media (max-width: 400px){
+    #row1 .key { flex: 0 0 calc((100% - 9*5px)/10); }
+    #row2 .key { flex: 0 0 calc((100% - 8*5px)/9); }
+    #row3 .key { flex: 0 0 calc((100% - 8*5px)/9); }
     .box { font-size: 20px; max-width: 50px; height: 50px; }
     .key { font-size: 14px; height: 45px; }
     #shortMessage { font-size: 14px; }
