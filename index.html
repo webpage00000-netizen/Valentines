@@ -199,7 +199,7 @@
 </div>
 
 <audio id="popSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
-<audio id="bgMusic" src="./IMAGES/music.mp3" loop></audio>
+<audio id="bgMusic" src="./IMAGES/music.mp3" loop preload="auto" volume="0.7"></audio>
 
 <div class="container" id="mainContainer" style="display:none;">
   <h1>Will you be my Valentine?</h1>
@@ -274,9 +274,20 @@ setTimeout(() => {
             loadingScreen.style.display = "none";
             document.getElementById("mainContainer").style.display = "flex";
             
-            // Play background music
+            // Play background music with user interaction
             const bgMusic = document.getElementById("bgMusic");
-            bgMusic.play().catch(err => console.log("Music autoplay blocked:", err));
+            const playMusic = () => {
+              bgMusic.play()
+                .then(() => console.log("Music playing"))
+                .catch(err => {
+                  console.log("Music autoplay blocked:", err);
+                  // Try playing on first click
+                  document.addEventListener('click', () => {
+                    bgMusic.play().catch(e => console.log("Still blocked:", e));
+                  }, { once: true });
+                });
+            };
+            playMusic();
           }, 800);
         }, 1500);
       }
@@ -324,6 +335,11 @@ function handleInput(letter) {
     input.push(letter);
     updateBoxes();
     checkInput();
+    // Try to play music on user interaction
+    const bgMusic = document.getElementById("bgMusic");
+    if (bgMusic.paused) {
+      bgMusic.play().catch(e => console.log("Music play failed:", e));
+    }
   }
 }
 
