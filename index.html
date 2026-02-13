@@ -146,31 +146,36 @@ h1{
 
 <script>
 /* ===== LOADING COUNTDOWN ===== */
-const loadingScreen=document.getElementById("loadingScreen");
-const countdownEl=document.getElementById("countdown");
-const pop=document.getElementById("popSound");
-let count=5;
+const loadingScreen = document.getElementById("loadingScreen");
+const countdownEl = document.getElementById("countdown");
+const pop = document.getElementById("popSound");
+let count = 5;
 
-setTimeout(()=>{
-  countdownEl.classList.add("show");
-  countdownEl.innerText="In "+count;
-  pop.play();
-  const interval=setInterval(()=>{
-    countdownEl.classList.remove("show");
-    setTimeout(()=>{
+// Start countdown immediately after 1.5s
+setTimeout(() => {
+  function tick() {
+    if (count > 0) {
+      countdownEl.textContent = "In " + count;
+      countdownEl.classList.add("show");
+      pop.currentTime = 0; 
+      pop.play();
       count--;
-      if(count>0){
-        countdownEl.innerText="In "+count;
-        countdownEl.classList.add("show");
-        pop.currentTime=0; pop.play();
-      } else {
-        clearInterval(interval);
-        loadingScreen.style.opacity="0";
-        setTimeout(()=>{loadingScreen.style.display="none"; document.getElementById("mainContainer").style.display="flex";},800);
-      }
-    },300);
-  },1000);
-},1500);
+      setTimeout(() => {
+        countdownEl.classList.remove("show");
+        setTimeout(tick, 500); // wait 0.5s then next tick
+      }, 700); // keep number visible 0.7s
+    } else {
+      // Done
+      loadingScreen.style.opacity = "0";
+      setTimeout(() => {
+        loadingScreen.style.display = "none";
+        document.getElementById("mainContainer").style.display = "flex";
+      }, 800);
+    }
+  }
+  tick();
+}, 1500);
+
 
 /* ===== KEYBOARD ===== */
 const rows={row1:['Q','W','E','R','T','Y','U','I','O','P'],row2:['A','S','D','F','G','H','J','K','L'],row3:['-','Z','X','C','V','B','N','M','Del']};
