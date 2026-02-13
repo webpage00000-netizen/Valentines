@@ -699,6 +699,272 @@
       right: 10px;
     }
   }
+
+  /* Letter Page */
+  #letterPage {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ffe6e6, #fff0f5);
+    padding-bottom: 100px;
+  }
+
+  #letterHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  #letterHeader button {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6fa5, #d60000);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(214, 0, 0, 0.3);
+  }
+
+  #letterHeader button:hover {
+    transform: scale(1.1);
+  }
+
+  #letterTitle {
+    text-align: center;
+    flex: 1;
+  }
+
+  #letterTitle h2 {
+    font-family: 'Fredoka One', cursive;
+    color: #d60000;
+    font-size: 20px;
+    margin: 0;
+  }
+
+  #letterCount {
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  #letterSelection {
+    margin-top: 120px;
+    padding: 20px;
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .letter-envelope {
+    width: 280px;
+    height: 200px;
+    perspective: 1000px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .letter-envelope:hover {
+    transform: translateY(-10px);
+  }
+
+  .envelope-front {
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: 2px solid #ffd6e8;
+  }
+
+  .letter-envelope:hover .envelope-front {
+    box-shadow: 0 15px 50px rgba(214, 0, 0, 0.25);
+    border-color: #ff6fa5;
+  }
+
+  .envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    border-left: 140px solid transparent;
+    border-right: 140px solid transparent;
+    border-top: 80px solid #ff6fa5;
+    transform-origin: top;
+    transition: transform 0.6s ease;
+  }
+
+  .letter-envelope.opening .envelope-flap {
+    transform: rotateX(-180deg);
+  }
+
+  .envelope-label {
+    font-family: 'Fredoka One', cursive;
+    font-size: 24px;
+    color: #d60000;
+    margin-top: 60px;
+    z-index: 1;
+  }
+
+  .heart-seal {
+    font-size: 40px;
+    margin-top: 10px;
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  /* Letter Content Modal */
+  #letterContentModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 10002;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  #letterContentModal.active {
+    display: flex;
+    opacity: 1;
+  }
+
+  #closeLetterContent {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+
+  #closeLetterContent:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+  }
+
+  #letterPaper {
+    max-width: 700px;
+    width: 100%;
+    max-height: 80vh;
+    background: linear-gradient(to bottom, #fff9f0, #fff5e6);
+    border-radius: 12px;
+    padding: 50px 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow-y: auto;
+    animation: letterUnfold 0.8s ease;
+    background-image: 
+      repeating-linear-gradient(
+        transparent,
+        transparent 30px,
+        rgba(214, 0, 0, 0.1) 30px,
+        rgba(214, 0, 0, 0.1) 31px
+      );
+  }
+
+  @keyframes letterUnfold {
+    0% {
+      transform: scaleY(0.1) rotateX(-90deg);
+      opacity: 0;
+    }
+    50% {
+      transform: scaleY(0.5) rotateX(-45deg);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scaleY(1) rotateX(0deg);
+      opacity: 1;
+    }
+  }
+
+  #letterPaper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 40px;
+    width: 2px;
+    height: 100%;
+    background: rgba(214, 0, 0, 0.2);
+  }
+
+  #letterMessage {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #333;
+    white-space: pre-wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (max-width: 768px) {
+    #letterSelection {
+      margin-top: 100px;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .letter-envelope {
+      width: 90%;
+      max-width: 280px;
+    }
+
+    #letterPaper {
+      padding: 30px 25px;
+      max-height: 75vh;
+    }
+
+    #letterMessage {
+      font-size: 14px;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -854,6 +1120,52 @@
         </svg>
       </button>
     </div>
+  </div>
+</div>
+
+<!-- Letter Page -->
+<div id="letterPage">
+  <div id="letterHeader">
+    <button id="backToChoiceFromLetter">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    <div id="letterTitle">
+      <h2>Love Letters</h2>
+      <div id="letterCount">Choose a letter to open</div>
+    </div>
+  </div>
+
+  <div id="letterSelection">
+    <div class="letter-envelope" id="envelope1">
+      <div class="envelope-front">
+        <div class="envelope-flap"></div>
+        <div class="envelope-label">Letter 1</div>
+        <div class="heart-seal">💕</div>
+      </div>
+    </div>
+    <div class="letter-envelope" id="envelope2">
+      <div class="envelope-front">
+        <div class="envelope-flap"></div>
+        <div class="envelope-label">Letter 2</div>
+        <div class="heart-seal">💕</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Letter Content Modal -->
+<div id="letterContentModal">
+  <button id="closeLetterContent">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+  
+  <div id="letterPaper">
+    <div id="letterMessage"></div>
   </div>
 </div>
 
@@ -1360,7 +1672,67 @@ document.addEventListener('keydown', (e) => {
 
 // Letter box (placeholder)
 document.getElementById('letterBox').addEventListener('click', () => {
-  alert("Letter coming soon! 💌💕");
+  document.getElementById('choicePage').style.display = 'none';
+  document.getElementById('letterPage').style.display = 'flex';
+  document.getElementById('musicPlayer').classList.remove('show'); // Hide music player
+});
+
+// Letter Page Logic
+const letterMessages = {
+  letter1: `Happy Valentine's Day baby! I don't know how many times I've said that I'm so lucky to have you, and I'll keep saying it a thousand more times because it's really true. Thank you for always supporting me and for always rooting for me. I'm always here for you too, no matter what.
+
+I want you to see some of my favorite photos of us together. I love all the pictures we have, but these ones always make me remember the exact moments we shared and they make me smile every time hihi
+
+I love you`,
+
+  letter2: `See you on June baby! I'm really looking forward to our wedding! sheeeeesh apakaangas Asawa yarn? HAHAHAHAHA!
+
+dee I'm really excited kasi after non mauumpisahan na natin lahat ng plano Excited na may halong pressure pero what i know is.. i'm really sure! kaso ikaw mukhang napilitan lang ata HAHAHAHAHAHAHA! pwede ba tusukin ng icepick yung judge pag di ka nag "opo"? chariizz.
+
+De seryoso na, if you're not so sure baby, pwede mong sabihin agad sakin. I want to consider your decision and feelings. Wala ng atrasan yon shunga kaa. Dito lang me vale? Sabihan moko if there is something na bothered ka, pagusapan natin. Pero syempre may halong pilit gagawin ko HAHAHAHA!
+
+haba na ng message taena gusto ko sana ipa-english kay chatgpt kaso feeling ko hindi ako yung nag sabi sayo  I hate too much formalityy!
+
+Last na nga! Happy Valentine's Day ulit baby! I love you sososososmuchh!`
+};
+
+function openLetter(letterNumber) {
+  const envelope = document.getElementById(`envelope${letterNumber}`);
+  const modal = document.getElementById('letterContentModal');
+  const letterMessage = document.getElementById('letterMessage');
+  
+  // Add opening animation to envelope
+  envelope.classList.add('opening');
+  
+  // Wait for envelope animation then show letter content
+  setTimeout(() => {
+    letterMessage.textContent = letterMessages[`letter${letterNumber}`];
+    modal.classList.add('active');
+  }, 600);
+}
+
+function closeLetterContent() {
+  const modal = document.getElementById('letterContentModal');
+  modal.classList.remove('active');
+  
+  // Remove opening class from all envelopes
+  document.querySelectorAll('.letter-envelope').forEach(env => {
+    env.classList.remove('opening');
+  });
+}
+
+// Letter envelope click handlers
+document.getElementById('envelope1').addEventListener('click', () => openLetter(1));
+document.getElementById('envelope2').addEventListener('click', () => openLetter(2));
+
+// Close letter content
+document.getElementById('closeLetterContent').addEventListener('click', closeLetterContent);
+
+// Back to choice from letter page
+document.getElementById('backToChoiceFromLetter').addEventListener('click', () => {
+  document.getElementById('letterPage').style.display = 'none';
+  document.getElementById('choicePage').style.display = 'flex';
+  document.getElementById('musicPlayer').classList.add('show'); // Show music player again
 });
 </script>
 </body>
