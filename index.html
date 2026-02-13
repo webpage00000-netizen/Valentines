@@ -309,6 +309,7 @@ function initPuzzle() {
       tile.style.backgroundImage = `url(${imageUrl})`;
       tile.style.backgroundPosition = `-${col * 100}px -${row * 100}px`;
       tile.draggable = true;
+      tile.dataset.correctPos = `-${col * 100}px -${row * 100}px`;
       puzzle.appendChild(tile);
     }
   }
@@ -332,18 +333,17 @@ function initPuzzle() {
         const temp = dragged.style.backgroundPosition;
         dragged.style.backgroundPosition = tile.style.backgroundPosition;
         tile.style.backgroundPosition = temp;
-        setTimeout(checkPuzzle, 120);  // delay for style to apply
+        setTimeout(checkPuzzle, 120);
       }
     });
   });
 }
 
 function normalizePosition(pos) {
-  return (pos || '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .toLowerCase()
-    .replace(/px\s*/g, 'px ');
+  // Extract numbers from position string
+  const matches = (pos || '').match(/-?\d+/g);
+  if (!matches || matches.length < 2) return null;
+  return `${matches[0]}px ${matches[1]}px`;
 }
 
 function checkPuzzle() {
@@ -355,9 +355,9 @@ function checkPuzzle() {
   tiles.forEach((tile, i) => {
     const col = i % 3;
     const row = Math.floor(i / 3);
-    const expectedX = `-${col * 100}px`;
-    const expectedY = `-${row * 100}px`;
-    const expected = normalizePosition(`${expectedX} ${expectedY}`);
+    const expectedX = -col * 100;
+    const expectedY = -row * 100;
+    const expected = `${expectedX}px ${expectedY}px`;
 
     const actual = normalizePosition(tile.style.backgroundPosition);
 
