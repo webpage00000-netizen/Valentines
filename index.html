@@ -169,7 +169,7 @@
 </div>
 
 <script>
-// LOADING
+// Loading animation
 const loadingScreen = document.getElementById("loadingScreen");
 const countdownEl = document.getElementById("countdown");
 const pop = document.getElementById("popSound");
@@ -198,7 +198,7 @@ setTimeout(() => {
   }, 1000);
 }, 1500);
 
-// KEYBOARD PART
+// Keyboard input
 const box1 = document.getElementById('box1');
 const box2 = document.getElementById('box2');
 const box3 = document.getElementById('box3');
@@ -295,10 +295,10 @@ document.getElementById('proceedBtn').onclick = () => {
   initPuzzle();
 };
 
-// PUZZLE PART ────────────────────────────────────────────────
+// Puzzle logic ───────────────────────────────────────────────────────────────
 const puzzle = document.getElementById('puzzle');
 const puzzleInstruction = document.getElementById('puzzleInstruction');
-const imageUrl = './IMAGES/22.jpg';   // ← try full raw url if still issues
+const imageUrl = './IMAGES/22.jpg';  // Change to raw URL if needed
 
 function initPuzzle() {
   puzzle.innerHTML = '';
@@ -307,14 +307,14 @@ function initPuzzle() {
       const tile = document.createElement('div');
       tile.classList.add('tile');
       tile.style.backgroundImage = `url(${imageUrl})`;
-      tile.style.backgroundPosition = `-${col*100}px -${row*100}px`;
+      tile.style.backgroundPosition = `-${col * 100}px -${row * 100}px`;
       tile.draggable = true;
       puzzle.appendChild(tile);
     }
   }
 
-  // shuffle
-  const tiles = [...puzzle.children];
+  // Shuffle
+  const tiles = Array.from(puzzle.children);
   tiles.sort(() => Math.random() - 0.5);
   tiles.forEach(t => puzzle.appendChild(t));
 
@@ -332,41 +332,42 @@ function initPuzzle() {
         const temp = dragged.style.backgroundPosition;
         dragged.style.backgroundPosition = tile.style.backgroundPosition;
         tile.style.backgroundPosition = temp;
-        setTimeout(checkPuzzle, 80);   // small delay helps
+        setTimeout(checkPuzzle, 120);  // delay for style to apply
       }
     });
   });
 }
 
-function normalizePos(str) {
-  if (!str) return '';
-  return str
+function normalizePosition(pos) {
+  return (pos || '')
     .replace(/\s+/g, ' ')
-    .replace(/,/g, ' ')
     .trim()
-    .toLowerCase();
+    .toLowerCase()
+    .replace(/px\s*/g, 'px ');
 }
 
 function checkPuzzle() {
-  console.log("Checking puzzle...");
+  console.log("checkPuzzle running");
 
-  const tiles = [...puzzle.children];
+  const tiles = Array.from(puzzle.children);
   let solved = true;
 
   tiles.forEach((tile, i) => {
-    const cx = `-${(i % 3) * 100}px`;
-    const cy = `-${Math.floor(i / 3) * 100}px`;
-    const expected = normalizePos(`${cx} ${cy}`);
+    const col = i % 3;
+    const row = Math.floor(i / 3);
+    const expectedX = `-${col * 100}px`;
+    const expectedY = `-${row * 100}px`;
+    const expected = normalizePosition(`${expectedX} ${expectedY}`);
 
-    const actual = normalizePos(tile.style.backgroundPosition);
+    const actual = normalizePosition(tile.style.backgroundPosition);
 
-    console.log(`Position ${i}: expected "${expected}" | got "${actual}"`);
+    console.log(`Tile ${i}: expected "${expected}" | actual "${actual}"`);
 
     if (actual !== expected) solved = false;
   });
 
   if (solved) {
-    console.log("SOLVED → starting flip animation");
+    console.log("SOLVED → flipping tiles");
 
     tiles.forEach((tile, i) => {
       setTimeout(() => {
@@ -374,52 +375,52 @@ function checkPuzzle() {
         tile.style.transform = 'rotateY(180deg)';
         tile.style.backgroundImage = 'none';
         tile.style.backgroundColor = '#444';
-      }, i * 160 + 100);
+      }, i * 160 + 150);
     });
 
     setTimeout(() => {
       puzzle.style.display = 'none';
       puzzleInstruction.style.display = 'none';
-      const reveal = document.getElementById('mergedReveal');
-      reveal.style.display = 'flex';
+      document.getElementById('mergedReveal').style.display = 'flex';
 
       const card = document.getElementById('greyCard');
       card.style.opacity = '0';
-      card.style.transform = 'scale(0.8)';
+      card.style.transform = 'scale(0.75)';
 
       setTimeout(() => {
         card.style.transition = 'all 0.9s ease';
         card.style.opacity = '1';
         card.style.transform = 'scale(1)';
         document.getElementById('tapTextFinal').style.display = 'block';
-      }, 120);
-    }, 9 * 160 + 800);
+      }, 150);
+    }, 3 * 160 + 1200);
   }
 }
 
-// CARD TAP
-document.getElementById('greyCard').onclick = () => {
+// Card tap
+document.getElementById('greyCard').addEventListener('click', () => {
   const card = document.getElementById('greyCard');
-  const tapTxt = document.getElementById('tapTextFinal');
+  const tapText = document.getElementById('tapTextFinal');
   const msg = document.getElementById('shortMessageFinal');
-  const btn = document.getElementById('nextAfterTap');
+  const nextBtn = document.getElementById('nextAfterTap');
 
   card.style.transition = 'all 0.7s ease';
-  card.style.transform = 'rotateY(180deg) scale(1.05)';
+  card.style.transform = 'rotateY(180deg) scale(1.06)';
   card.style.background = 'linear-gradient(135deg, #ff6fa5, #d60000)';
   card.innerHTML = '♡ Opened! ♡';
-  tapTxt.style.display = 'none';
+  tapText.style.display = 'none';
 
   setTimeout(() => {
     msg.style.display = 'block';
     msg.textContent = "You're my favorite person in the whole world ♥ Will you be my Valentine forever?";
-    btn.style.display = 'inline-block';
-  }, 700);
-};
+    nextBtn.style.display = 'inline-block';
+  }, 800);
+});
 
-// NEXT
+// Next button
 document.getElementById('nextAfterTap').onclick = () => {
   alert("Yayyyy! 💕 Now comes the biggest hug everrrr!");
+  // Optional: window.location.href = "next.html"; or more content
 };
 </script>
 </body>
