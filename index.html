@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine Surprise</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   #loadingScreen {
@@ -432,6 +432,273 @@
     border-radius: 10px;
     transition: width 0.1s linear;
   }
+
+  /* Gallery Page */
+  #galleryPage {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ffe6e6, #fff0f5);
+    padding-bottom: 100px;
+  }
+
+  #galleryHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  #galleryHeader button {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6fa5, #d60000);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(214, 0, 0, 0.3);
+  }
+
+  #galleryHeader button:hover {
+    transform: scale(1.1);
+  }
+
+  #galleryTitle {
+    text-align: center;
+    flex: 1;
+  }
+
+  #galleryTitle h2 {
+    font-family: 'Fredoka One', cursive;
+    color: #d60000;
+    font-size: 20px;
+    margin: 0;
+  }
+
+  #photoCount {
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  #galleryGrid {
+    margin-top: 90px;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+    max-width: 1200px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .gallery-item {
+    position: relative;
+    padding-bottom: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+    cursor: pointer;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .gallery-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(214, 0, 0, 0.2);
+    z-index: 10;
+  }
+
+  .gallery-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Slideshow Modal */
+  #slideshowModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10001;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #slideshowModal.active {
+    display: flex;
+  }
+
+  #closeSlideshow {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+
+  #closeSlideshow:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+  }
+
+  .slideNav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+
+  .slideNav:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  #prevSlide {
+    left: 20px;
+  }
+
+  #nextSlide {
+    right: 20px;
+  }
+
+  #slideshowImage {
+    max-width: 90%;
+    max-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #slideshowImage img {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 12px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.4s ease;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  #slideCounter {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 20px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+  }
+
+  #slideshowControls {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+  }
+
+  #playPauseSlideshow {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6fa5, #d60000);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(214, 0, 0, 0.5);
+  }
+
+  #playPauseSlideshow:hover {
+    transform: scale(1.1);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    #galleryGrid {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 6px;
+      padding: 10px;
+    }
+
+    #slideshowImage {
+      max-width: 95%;
+      max-height: 70vh;
+    }
+
+    .slideNav {
+      width: 40px;
+      height: 40px;
+    }
+
+    #prevSlide {
+      left: 10px;
+    }
+
+    #nextSlide {
+      right: 10px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -469,7 +736,144 @@
 <audio id="popSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
 <audio id="bgMusic" loop preload="auto"></audio>
 
+<div class="container" id="mainContainer" style="display:none;">
+  <div id="marqueeBanner">
+    <div id="marqueeText">
+      <span>PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨</span>
+    </div>
+  </div>
+  <h1>Will you be my Valentine?</h1>
+  <div class="input-boxes">
+    <div class="box" id="box1"></div>
+    <div class="box" id="box2"></div>
+    <div class="box" id="box3"></div>
+  </div>
+  <div class="keyboard" id="keyboard">
+    <div class="row" id="row1"></div>
+    <div class="row" id="row2"></div>
+    <div class="row" id="row3"></div>
+  </div>
+  <div id="message"></div>
+  <div id="shortMessage">Please wait a few seconds while we prepare a surprise for you...</div>
+  <div id="loading">LOADING<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span> <span id="countdown8">8</span>s</div>
+  <button id="proceedBtn">Proceed</button>
+</div>
+
+<div id="puzzleContainer">
+  <h1>Complete the Puzzle!</h1>
+  <div id="puzzleInstruction">Drag pieces to solve.</div>
+  <div id="puzzle"></div>
+  <div id="mergedReveal">
+    <div id="greyCard">Tap me ♥</div>
+  </div>
+  <div id="tapTextFinal">Tap the card ↑</div>
+  <div id="shortMessageFinal"></div>
+  <button id="nextAfterTap">Next</button>
+</div>
+
+<div id="choicePage">
+  <h1>Open a present</h1>
+  <div id="choiceBoxes">
+    <div class="choiceBox" id="galleryBox">
+      <div class="boxIcon">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+      </div>
+      <div class="boxTitle">Gallery</div>
+      <div class="boxDesc">Our memories together</div>
+    </div>
+    <div class="choiceBox" id="letterBox">
+      <div class="boxIcon">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+      </div>
+      <div class="boxTitle">Letter</div>
+      <div class="boxDesc">A message for you</div>
+    </div>
+  </div>
+</div>
+
+<!-- Gallery Page -->
+<div id="galleryPage">
+  <div id="galleryHeader">
+    <button id="backToChoice">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    <div id="galleryTitle">
+      <h2>Our Memories</h2>
+      <div id="photoCount">0 photos</div>
+    </div>
+    <button id="slideshowBtn">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+    </button>
+  </div>
+  
+  <div id="galleryGrid"></div>
+  
+  <!-- Slideshow Modal -->
+  <div id="slideshowModal">
+    <button id="closeSlideshow">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    
+    <button id="prevSlide" class="slideNav">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+    
+    <div id="slideshowImage"></div>
+    
+    <button id="nextSlide" class="slideNav">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    </button>
+    
+    <div id="slideCounter">1 / 1</div>
+    
+    <div id="slideshowControls">
+      <button id="playPauseSlideshow">
+        <svg id="playSlideIcon" width="20" height="20" viewBox="0 0 24 24" fill="white">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+        <svg id="pauseSlideIcon" width="20" height="20" viewBox="0 0 24 24" fill="white" style="display:none;">
+          <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
+// Gallery Images - Add your image URLs here
+const galleryImages = [
+  './IMAGES/1.jpg',
+  './IMAGES/2.jpg',
+  './IMAGES/3.jpg',
+  './IMAGES/4.jpg',
+  './IMAGES/5.jpg',
+  './IMAGES/6.jpg',
+  './IMAGES/7.jpg',
+  './IMAGES/8.jpg',
+  './IMAGES/9.jpg',
+  './IMAGES/10.jpg',
+  './IMAGES/11.jpg',
+  './IMAGES/12.jpg'
+];
+
 // Set up music source and volume
 const bgMusic = document.getElementById("bgMusic");
 bgMusic.src = "./IMAGES/music.mp3";
@@ -538,71 +942,7 @@ setTimeout(() => {
       });
   }
 }, 3000);
-</script>
 
-<div class="container" id="mainContainer" style="display:none;">
-  <div id="marqueeBanner">
-    <div id="marqueeText">
-      <span>PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨</span>
-    </div>
-  </div>
-  <h1>Will you be my Valentine?</h1>
-  <div class="input-boxes">
-    <div class="box" id="box1"></div>
-    <div class="box" id="box2"></div>
-    <div class="box" id="box3"></div>
-  </div>
-  <div class="keyboard" id="keyboard">
-    <div class="row" id="row1"></div>
-    <div class="row" id="row2"></div>
-    <div class="row" id="row3"></div>
-  </div>
-  <div id="message"></div>
-  <div id="shortMessage">Please wait a few seconds while we prepare a surprise for you...</div>
-  <div id="loading">LOADING<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span> <span id="countdown8">8</span>s</div>
-  <button id="proceedBtn">Proceed</button>
-</div>
-
-<div id="puzzleContainer">
-  <h1>Complete the Puzzle!</h1>
-  <div id="puzzleInstruction">Drag pieces to solve.</div>
-  <div id="puzzle"></div>
-  <div id="mergedReveal">
-    <div id="greyCard">Tap me ♥</div>
-  </div>
-  <div id="tapTextFinal">Tap the card ↑</div>
-  <div id="shortMessageFinal"></div>
-  <button id="nextAfterTap">Next</button>
-</div>
-
-<div id="choicePage">
-  <h1>Open a present</h1>
-  <div id="choiceBoxes">
-    <div class="choiceBox" id="galleryBox">
-      <div class="boxIcon">
-        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-          <circle cx="8.5" cy="8.5" r="1.5"/>
-          <polyline points="21 15 16 10 5 21"/>
-        </svg>
-      </div>
-      <div class="boxTitle">Gallery</div>
-      <div class="boxDesc">Our memories together</div>
-    </div>
-    <div class="choiceBox" id="letterBox">
-      <div class="boxIcon">
-        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-          <polyline points="22,6 12,13 2,6"/>
-        </svg>
-      </div>
-      <div class="boxTitle">Letter</div>
-      <div class="boxDesc">A message for you</div>
-    </div>
-  </div>
-</div>
-
-<script>
 // Loading animation
 const loadingScreen = document.getElementById("loadingScreen");
 const countdownEl = document.getElementById("countdown");
@@ -767,10 +1107,10 @@ document.getElementById('proceedBtn').onclick = () => {
   initPuzzle();
 };
 
-// Puzzle logic ───────────────────────────────────────────────────────────────
+// Puzzle logic
 const puzzle = document.getElementById('puzzle');
 const puzzleInstruction = document.getElementById('puzzleInstruction');
-const imageUrl = './IMAGES/22.jpg';  // Change to raw URL if needed
+const imageUrl = './IMAGES/22.jpg';
 
 function initPuzzle() {
   puzzle.innerHTML = '';
@@ -812,15 +1152,12 @@ function initPuzzle() {
 }
 
 function normalizePosition(pos) {
-  // Extract numbers from position string
   const matches = (pos || '').match(/-?\d+/g);
   if (!matches || matches.length < 2) return null;
   return `${matches[0]}px ${matches[1]}px`;
 }
 
 function checkPuzzle() {
-  console.log("checkPuzzle running");
-
   const tiles = Array.from(puzzle.children);
   let solved = true;
 
@@ -830,17 +1167,12 @@ function checkPuzzle() {
     const expectedX = -col * 100;
     const expectedY = -row * 100;
     const expected = `${expectedX}px ${expectedY}px`;
-
     const actual = normalizePosition(tile.style.backgroundPosition);
-
-    console.log(`Tile ${i}: expected "${expected}" | actual "${actual}"`);
 
     if (actual !== expected) solved = false;
   });
 
   if (solved) {
-    console.log("SOLVED → flipping tiles");
-
     tiles.forEach((tile, i) => {
       setTimeout(() => {
         tile.style.transition = 'all 0.6s ease';
@@ -894,15 +1226,131 @@ document.getElementById('nextAfterTap').onclick = () => {
   document.getElementById('choicePage').style.display = "flex";
 };
 
-// Choice page handlers
+// Gallery Page Logic
+let currentSlideIndex = 0;
+let slideshowInterval = null;
+let isSlideshowPlaying = false;
+
+function initGallery() {
+  const galleryGrid = document.getElementById('galleryGrid');
+  const photoCount = document.getElementById('photoCount');
+  
+  galleryGrid.innerHTML = '';
+  photoCount.textContent = `${galleryImages.length} photos`;
+  
+  galleryImages.forEach((imgSrc, index) => {
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.innerHTML = `<img src="${imgSrc}" alt="Memory ${index + 1}">`;
+    item.addEventListener('click', () => openSlideshow(index));
+    galleryGrid.appendChild(item);
+  });
+}
+
+function openSlideshow(index) {
+  currentSlideIndex = index;
+  const modal = document.getElementById('slideshowModal');
+  modal.classList.add('active');
+  showSlide(currentSlideIndex);
+}
+
+function closeSlideshow() {
+  const modal = document.getElementById('slideshowModal');
+  modal.classList.remove('active');
+  stopSlideshow();
+}
+
+function showSlide(index) {
+  const slideshowImage = document.getElementById('slideshowImage');
+  const slideCounter = document.getElementById('slideCounter');
+  
+  slideshowImage.innerHTML = `<img src="${galleryImages[index]}" alt="Slide ${index + 1}">`;
+  slideCounter.textContent = `${index + 1} / ${galleryImages.length}`;
+}
+
+function nextSlide() {
+  currentSlideIndex = (currentSlideIndex + 1) % galleryImages.length;
+  showSlide(currentSlideIndex);
+}
+
+function prevSlide() {
+  currentSlideIndex = (currentSlideIndex - 1 + galleryImages.length) % galleryImages.length;
+  showSlide(currentSlideIndex);
+}
+
+function toggleSlideshow() {
+  const playSlideIcon = document.getElementById('playSlideIcon');
+  const pauseSlideIcon = document.getElementById('pauseSlideIcon');
+  
+  if (isSlideshowPlaying) {
+    stopSlideshow();
+  } else {
+    startSlideshow();
+  }
+}
+
+function startSlideshow() {
+  isSlideshowPlaying = true;
+  document.getElementById('playSlideIcon').style.display = 'none';
+  document.getElementById('pauseSlideIcon').style.display = 'block';
+  
+  slideshowInterval = setInterval(() => {
+    nextSlide();
+  }, 3000);
+}
+
+function stopSlideshow() {
+  isSlideshowPlaying = false;
+  document.getElementById('playSlideIcon').style.display = 'block';
+  document.getElementById('pauseSlideIcon').style.display = 'none';
+  
+  if (slideshowInterval) {
+    clearInterval(slideshowInterval);
+    slideshowInterval = null;
+  }
+}
+
+// Gallery Event Listeners
 document.getElementById('galleryBox').addEventListener('click', () => {
-  alert("Gallery coming soon! 📸💕");
-  // TODO: Navigate to gallery page
+  document.getElementById('choicePage').style.display = 'none';
+  document.getElementById('galleryPage').style.display = 'flex';
+  document.getElementById('musicPlayer').classList.remove('show'); // Hide music player
+  initGallery();
 });
 
+document.getElementById('backToChoice').addEventListener('click', () => {
+  document.getElementById('galleryPage').style.display = 'none';
+  document.getElementById('choicePage').style.display = 'flex';
+  document.getElementById('musicPlayer').classList.add('show'); // Show music player again
+});
+
+document.getElementById('slideshowBtn').addEventListener('click', () => {
+  openSlideshow(0);
+  startSlideshow();
+});
+
+document.getElementById('closeSlideshow').addEventListener('click', closeSlideshow);
+document.getElementById('nextSlide').addEventListener('click', nextSlide);
+document.getElementById('prevSlide').addEventListener('click', prevSlide);
+document.getElementById('playPauseSlideshow').addEventListener('click', toggleSlideshow);
+
+// Keyboard navigation in slideshow
+document.addEventListener('keydown', (e) => {
+  const modal = document.getElementById('slideshowModal');
+  if (modal.classList.contains('active')) {
+    if (e.key === 'ArrowRight') nextSlide();
+    if (e.key === 'ArrowLeft') prevSlide();
+    if (e.key === 'Escape') closeSlideshow();
+    if (e.key === ' ') {
+      e.preventDefault();
+      toggleSlideshow();
+    }
+  }
+});
+
+// Letter box (placeholder)
 document.getElementById('letterBox').addEventListener('click', () => {
   alert("Letter coming soon! 💌💕");
-  // TODO: Navigate to letter page
 });
 </script>
 </body>
