@@ -199,7 +199,19 @@
 </div>
 
 <audio id="popSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
-<audio id="bgMusic" src="./IMAGES/music.mp3" loop preload="auto" volume="0.9"></audio>
+<audio id="bgMusic" loop preload="auto"></audio>
+
+<script>
+// Set up music source and volume
+const bgMusic = document.getElementById("bgMusic");
+bgMusic.src = "./IMAGES/music.mp3";
+bgMusic.volume = 0.7;
+
+// Debug music loading
+bgMusic.addEventListener('loadeddata', () => console.log("✅ Music file loaded successfully"));
+bgMusic.addEventListener('error', (e) => console.error("❌ Music loading error:", e, "Check if ./IMAGES/music.mp3 exists"));
+bgMusic.addEventListener('canplay', () => console.log("✅ Music can play"));
+</script>
 
 <div class="container" id="mainContainer" style="display:none;">
   <h1>Will you be my Valentine?</h1>
@@ -274,20 +286,28 @@ setTimeout(() => {
             loadingScreen.style.display = "none";
             document.getElementById("mainContainer").style.display = "flex";
             
-            // Play background music with user interaction
-            const bgMusic = document.getElementById("bgMusic");
-            const playMusic = () => {
-              bgMusic.play()
-                .then(() => console.log("Music playing"))
-                .catch(err => {
-                  console.log("Music autoplay blocked:", err);
-                  // Try playing on first click
-                  document.addEventListener('click', () => {
-                    bgMusic.play().catch(e => console.log("Still blocked:", e));
-                  }, { once: true });
-                });
-            };
-            playMusic();
+            // Play background music
+            console.log("Attempting to play music...");
+            bgMusic.volume = 0.7;
+            bgMusic.play()
+              .then(() => {
+                console.log("✅ Music is playing!");
+              })
+              .catch(err => {
+                console.log("⚠️ Autoplay blocked, will try on first user interaction:", err);
+                // Fallback: play on any user interaction
+                const playOnInteraction = () => {
+                  bgMusic.play()
+                    .then(() => {
+                      console.log("✅ Music playing after user interaction!");
+                      document.removeEventListener('click', playOnInteraction);
+                      document.removeEventListener('keydown', playOnInteraction);
+                    })
+                    .catch(e => console.error("Still can't play:", e));
+                };
+                document.addEventListener('click', playOnInteraction);
+                document.addEventListener('keydown', playOnInteraction);
+              });
           }, 800);
         }, 1500);
       }
