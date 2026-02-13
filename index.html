@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  /* ===== LOADING SCREEN ===== */
   #loadingScreen {
     position: fixed; inset: 0;
     background: #f9fafc;
@@ -34,7 +33,6 @@
     opacity: 0; transition: 0.4s;
   }
   .show { opacity: 1; transform: scale(1.1); }
-  /* ===== MAIN PAGE ===== */
   body {
     font-family: 'Montserrat', sans-serif;
     background: linear-gradient(135deg, #ffe6e6, #fff0f5);
@@ -87,7 +85,6 @@
     display: none; transition: 0.2s;
   }
   #proceedBtn:hover { background: #ff1a1a; transform: scale(1.05); }
-  /* ===== PUZZLE ===== */
   #puzzleContainer { display: none; flex-direction: column; align-items: center; }
   #puzzleInstruction { margin-bottom: 10px; text-align: center; font-size: 16px; color: #333; }
   #puzzle {
@@ -102,7 +99,6 @@
     transform-style: preserve-3d;
   }
   .tile.dragging { opacity: 0.6; transform: scale(1.05); }
-  /* Merged card after puzzle solve */
   #mergedReveal {
     display: none; justify-content: center; margin: 30px 0 20px;
   }
@@ -130,7 +126,7 @@
 </style>
 </head>
 <body>
-<!-- LOADING -->
+
 <div id="loadingScreen">
   <div class="cat-wrapper">
     <img class="cat" src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="cat">
@@ -139,8 +135,9 @@
   <div class="loading-text">Get ready...</div>
   <div class="countdown" id="countdown"></div>
 </div>
+
 <audio id="popSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
-<!-- MAIN -->
+
 <div class="container" id="mainContainer" style="display:none;">
   <h1>Will you be my Valentine?</h1>
   <div class="input-boxes">
@@ -158,7 +155,7 @@
   <div id="loading">LOADING<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span> <span id="countdown8">8</span>s</div>
   <button id="proceedBtn">Proceed</button>
 </div>
-<!-- PUZZLE -->
+
 <div id="puzzleContainer">
   <h1>Complete the Puzzle!</h1>
   <div id="puzzleInstruction">Drag pieces to solve.</div>
@@ -172,7 +169,7 @@
 </div>
 
 <script>
-// ===== LOADING =====
+// LOADING
 const loadingScreen = document.getElementById("loadingScreen");
 const countdownEl = document.getElementById("countdown");
 const pop = document.getElementById("popSound");
@@ -201,7 +198,7 @@ setTimeout(() => {
   }, 1000);
 }, 1500);
 
-// ===== KEYBOARD =====
+// KEYBOARD PART
 const box1 = document.getElementById('box1');
 const box2 = document.getElementById('box2');
 const box3 = document.getElementById('box3');
@@ -249,9 +246,7 @@ function handleSpecial(letter) {
     input.push(letter);
     specialPressed[letter] = true;
     updateBoxes();
-    if (specialPressed.N && specialPressed.O) {
-      message.textContent = "PLEASE!! 🙏";
-    }
+    if (specialPressed.N && specialPressed.O) message.textContent = "PLEASE!! 🙏";
   }
 }
 
@@ -300,122 +295,131 @@ document.getElementById('proceedBtn').onclick = () => {
   initPuzzle();
 };
 
-// ===== PUZZLE =====
+// PUZZLE PART ────────────────────────────────────────────────
 const puzzle = document.getElementById('puzzle');
 const puzzleInstruction = document.getElementById('puzzleInstruction');
-const imageUrl = 'IMAGES/22.jpg'; // or use './IMAGES/22.jpg' or full raw URL if needed
+const imageUrl = './IMAGES/22.jpg';   // ← try full raw url if still issues
 
 function initPuzzle() {
   puzzle.innerHTML = '';
   for (let row = 0; row < 3; row++) {
     for (let col = 0; col < 3; col++) {
-      let tile = document.createElement('div');
+      const tile = document.createElement('div');
       tile.classList.add('tile');
       tile.style.backgroundImage = `url(${imageUrl})`;
-      tile.style.backgroundPosition = `-${col * 100}px -${row * 100}px`;
+      tile.style.backgroundPosition = `-${col*100}px -${row*100}px`;
       tile.draggable = true;
       puzzle.appendChild(tile);
     }
   }
 
-  // Shuffle the tiles (DOM order)
-  const tiles = Array.from(puzzle.children);
+  // shuffle
+  const tiles = [...puzzle.children];
   tiles.sort(() => Math.random() - 0.5);
-  tiles.forEach(t => puzzle.appendChild(t)); // re-append in shuffled order
+  tiles.forEach(t => puzzle.appendChild(t));
 
   let dragged = null;
   tiles.forEach(tile => {
-    tile.addEventListener('dragstart', () => { dragged = tile; tile.classList.add('dragging'); });
-    tile.addEventListener('dragend',   () => { tile.classList.remove('dragging'); });
-    tile.addEventListener('dragover',  e  => e.preventDefault());
-    tile.addEventListener('drop',      () => {
+    tile.addEventListener('dragstart', () => {
+      dragged = tile;
+      tile.classList.add('dragging');
+    });
+    tile.addEventListener('dragend', () => tile.classList.remove('dragging'));
+    tile.addEventListener('dragover', e => e.preventDefault());
+    tile.addEventListener('drop', e => {
+      e.preventDefault();
       if (dragged && dragged !== tile) {
-        let temp = dragged.style.backgroundPosition;
+        const temp = dragged.style.backgroundPosition;
         dragged.style.backgroundPosition = tile.style.backgroundPosition;
         tile.style.backgroundPosition = temp;
-        checkPuzzle();
+        setTimeout(checkPuzzle, 80);   // small delay helps
       }
     });
   });
 }
 
-function normalizePosition(str) {
+function normalizePos(str) {
+  if (!str) return '';
   return str
-    .replace(/\s+/g, ' ')   // collapse multiple spaces
-    .trim();                // remove leading/trailing
+    .replace(/\s+/g, ' ')
+    .replace(/,/g, ' ')
+    .trim()
+    .toLowerCase();
 }
 
 function checkPuzzle() {
-  console.log("Checking puzzle..."); // debug
+  console.log("Checking puzzle...");
 
-  const isSolved = Array.from(puzzle.children).every((tile, idx) => {
-    const correctX = `-${(idx % 3) * 100}px`;
-    const correctY = `-${Math.floor(idx / 3) * 100}px`;
-    const expected = `${correctX} ${correctY}`;
+  const tiles = [...puzzle.children];
+  let solved = true;
 
-    const current = normalizePosition(tile.style.backgroundPosition);
+  tiles.forEach((tile, i) => {
+    const cx = `-${(i % 3) * 100}px`;
+    const cy = `-${Math.floor(i / 3) * 100}px`;
+    const expected = normalizePos(`${cx} ${cy}`);
 
-    console.log(`Slot ${idx}: expected "${expected}" | actual "${current}"`); // debug
+    const actual = normalizePos(tile.style.backgroundPosition);
 
-    return current === expected;
+    console.log(`Position ${i}: expected "${expected}" | got "${actual}"`);
+
+    if (actual !== expected) solved = false;
   });
 
-  if (isSolved) {
-    console.log("PUZZLE SOLVED! Starting animation.");
+  if (solved) {
+    console.log("SOLVED → starting flip animation");
 
-    // Flip tiles to grey one by one
-    Array.from(puzzle.children).forEach((tile, i) => {
+    tiles.forEach((tile, i) => {
       setTimeout(() => {
-        tile.style.transform = "rotateY(180deg)";
-        tile.style.backgroundImage = "none";
-        tile.style.backgroundColor = "#444";
-      }, i * 140);
+        tile.style.transition = 'all 0.6s ease';
+        tile.style.transform = 'rotateY(180deg)';
+        tile.style.backgroundImage = 'none';
+        tile.style.backgroundColor = '#444';
+      }, i * 160 + 100);
     });
 
-    // Show merged card after flips
     setTimeout(() => {
-      puzzle.style.display = "none";
-      puzzleInstruction.style.display = "none";
-      const merged = document.getElementById("mergedReveal");
-      merged.style.display = "flex";
-      const card = document.getElementById("greyCard");
-      card.style.opacity = "0";
-      card.style.transform = "scale(0.75)";
+      puzzle.style.display = 'none';
+      puzzleInstruction.style.display = 'none';
+      const reveal = document.getElementById('mergedReveal');
+      reveal.style.display = 'flex';
+
+      const card = document.getElementById('greyCard');
+      card.style.opacity = '0';
+      card.style.transform = 'scale(0.8)';
+
       setTimeout(() => {
-        card.style.transition = "all 0.9s ease";
-        card.style.opacity = "1";
-        card.style.transform = "scale(1)";
-      }, 50);
-      document.getElementById("tapTextFinal").style.display = "block";
-    }, 3 * 140 + 900);
+        card.style.transition = 'all 0.9s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'scale(1)';
+        document.getElementById('tapTextFinal').style.display = 'block';
+      }, 120);
+    }, 9 * 160 + 800);
   }
 }
 
-// ===== GREY CARD TAP =====
-document.getElementById("greyCard").addEventListener("click", () => {
-  const card = document.getElementById("greyCard");
-  const tapText = document.getElementById("tapTextFinal");
-  const msg = document.getElementById("shortMessageFinal");
-  const nextBtn = document.getElementById("nextAfterTap");
+// CARD TAP
+document.getElementById('greyCard').onclick = () => {
+  const card = document.getElementById('greyCard');
+  const tapTxt = document.getElementById('tapTextFinal');
+  const msg = document.getElementById('shortMessageFinal');
+  const btn = document.getElementById('nextAfterTap');
 
-  card.style.transition = "all 0.7s ease";
-  card.style.transform = "rotateY(180deg) scale(1.06)";
-  card.style.background = "linear-gradient(135deg, #ff6fa5, #d60000)";
-  card.innerHTML = "♡ Opened! ♡";
-
-  tapText.style.display = "none";
+  card.style.transition = 'all 0.7s ease';
+  card.style.transform = 'rotateY(180deg) scale(1.05)';
+  card.style.background = 'linear-gradient(135deg, #ff6fa5, #d60000)';
+  card.innerHTML = '♡ Opened! ♡';
+  tapTxt.style.display = 'none';
 
   setTimeout(() => {
-    msg.style.display = "block";
+    msg.style.display = 'block';
     msg.textContent = "You're my favorite person in the whole world ♥ Will you be my Valentine forever?";
-    nextBtn.style.display = "inline-block";
-  }, 800);
-});
+    btn.style.display = 'inline-block';
+  }, 700);
+};
 
-// ===== NEXT BUTTON =====
-document.getElementById("nextAfterTap").onclick = () => {
+// NEXT
+document.getElementById('nextAfterTap').onclick = () => {
   alert("Yayyyy! 💕 Now comes the biggest hug everrrr!");
-  // You can replace alert with: window.location.href = "next-page.html"; or show more content
 };
 </script>
 </body>
