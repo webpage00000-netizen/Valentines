@@ -185,6 +185,101 @@
     border: none; border-radius: 12px; cursor: pointer;
   }
   #nextAfterTap:hover { background: #ff1a1a; transform: scale(1.05); }
+  
+  /* Floating Music Player - iOS Style */
+  #musicPlayer {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border-radius: 30px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    z-index: 10000;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    min-width: 320px;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  #musicPlayer.show {
+    opacity: 1;
+  }
+  #musicProgress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255, 182, 193, 0.3);
+    border-radius: 0 0 30px 30px;
+    overflow: hidden;
+  }
+  #playPauseBtn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6fa5, #d60000);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(214, 0, 0, 0.3);
+  }
+  #playPauseBtn:hover {
+    transform: scale(1.1);
+  }
+  #playPauseBtn:active {
+    transform: scale(0.95);
+  }
+  #songInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  #songTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #songArtist {
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #progressBar {
+    width: 80px;
+    height: 6px;
+    background: rgba(214, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  #progressFill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff6fa5, #d60000);
+    border-radius: 10px;
+    transition: width 0.1s linear;
+  }
 </style>
 </head>
 <body>
@@ -196,6 +291,26 @@
   <div class="loading-text">This will take a few seconds</div>
   <div class="loading-text">Get ready...</div>
   <div class="countdown" id="countdown"></div>
+</div>
+
+<!-- Floating Music Player -->
+<div id="musicPlayer">
+  <div id="musicProgress"></div>
+  <button id="playPauseBtn">
+    <svg id="playIcon" width="24" height="24" viewBox="0 0 24 24" fill="white">
+      <path d="M8 5v14l11-7z"/>
+    </svg>
+    <svg id="pauseIcon" width="24" height="24" viewBox="0 0 24 24" fill="white" style="display:none;">
+      <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+    </svg>
+  </button>
+  <div id="songInfo">
+    <div id="songTitle">Nothing</div>
+    <div id="songArtist">Bruno Major</div>
+  </div>
+  <div id="progressBar">
+    <div id="progressFill"></div>
+  </div>
 </div>
 
 <audio id="popSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
@@ -211,6 +326,65 @@ bgMusic.volume = 0.7;
 bgMusic.addEventListener('loadeddata', () => console.log("✅ Music file loaded successfully"));
 bgMusic.addEventListener('error', (e) => console.error("❌ Music loading error:", e, "Check if ./IMAGES/music.mp3 exists"));
 bgMusic.addEventListener('canplay', () => console.log("✅ Music can play"));
+
+// Music Player Controls
+const playPauseBtn = document.getElementById('playPauseBtn');
+const playIcon = document.getElementById('playIcon');
+const pauseIcon = document.getElementById('pauseIcon');
+const progressFill = document.getElementById('progressFill');
+const progressBar = document.getElementById('progressBar');
+let isPlaying = false;
+
+// Play/Pause toggle
+playPauseBtn.addEventListener('click', () => {
+  if (isPlaying) {
+    bgMusic.pause();
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+    isPlaying = false;
+  } else {
+    bgMusic.play()
+      .then(() => {
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+        isPlaying = true;
+        console.log("✅ Music playing");
+      })
+      .catch(err => console.error("❌ Play error:", err));
+  }
+});
+
+// Update progress bar
+bgMusic.addEventListener('timeupdate', () => {
+  if (bgMusic.duration) {
+    const progress = (bgMusic.currentTime / bgMusic.duration) * 100;
+    progressFill.style.width = progress + '%';
+  }
+});
+
+// Click progress bar to seek
+progressBar.addEventListener('click', (e) => {
+  const rect = progressBar.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const percentage = clickX / rect.width;
+  bgMusic.currentTime = percentage * bgMusic.duration;
+});
+
+// Auto-play attempt when keyboard page loads
+setTimeout(() => {
+  if (document.getElementById("mainContainer").style.display === "flex") {
+    bgMusic.play()
+      .then(() => {
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+        isPlaying = true;
+      })
+      .catch(() => {
+        // Autoplay blocked, user will need to click play button
+        console.log("⚠️ Autoplay blocked - click play button to start music");
+      });
+  }
+}, 3000);
 </script>
 
 <div class="container" id="mainContainer" style="display:none;">
@@ -286,28 +460,10 @@ setTimeout(() => {
             loadingScreen.style.display = "none";
             document.getElementById("mainContainer").style.display = "flex";
             
-            // Play background music
-            console.log("Attempting to play music...");
-            bgMusic.volume = 0.7;
-            bgMusic.play()
-              .then(() => {
-                console.log("✅ Music is playing!");
-              })
-              .catch(err => {
-                console.log("⚠️ Autoplay blocked, will try on first user interaction:", err);
-                // Fallback: play on any user interaction
-                const playOnInteraction = () => {
-                  bgMusic.play()
-                    .then(() => {
-                      console.log("✅ Music playing after user interaction!");
-                      document.removeEventListener('click', playOnInteraction);
-                      document.removeEventListener('keydown', playOnInteraction);
-                    })
-                    .catch(e => console.error("Still can't play:", e));
-                };
-                document.addEventListener('click', playOnInteraction);
-                document.addEventListener('keydown', playOnInteraction);
-              });
+            // Show music player
+            setTimeout(() => {
+              document.getElementById('musicPlayer').classList.add('show');
+            }, 300);
           }, 800);
         }, 1500);
       }
