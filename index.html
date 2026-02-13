@@ -188,21 +188,35 @@ const gridSize=3;
 const imageUrl='IMAGES/21.jpg';
 let tiles=[];
 
+// Puzzle setup
 function initPuzzle(){
   puzzleInstruction.textContent=/Mobi|Android/i.test(navigator.userAgent) ? "On mobile: Hold then drag piece." : "On desktop: Click and drag piece.";
   puzzle.innerHTML=''; tiles=[];
-  for(let row=0;row<gridSize;row++){
-    for(let col=0;col<gridSize;col++){
+
+  const puzzleWidth = puzzle.clientWidth; // total width
+  const tileSize = puzzleWidth / gridSize; // each tile size
+  puzzle.style.gridTemplateColumns=`repeat(${gridSize}, ${tileSize}px)`;
+  puzzle.style.gridTemplateRows=`repeat(${gridSize}, ${tileSize}px)`;
+
+  for(let row=0; row<gridSize; row++){
+    for(let col=0; col<gridSize; col++){
       let tile=document.createElement('div');
       tile.classList.add('tile');
+      tile.style.width = tileSize+'px';
+      tile.style.height = tileSize+'px';
       tile.style.backgroundImage=`url(${imageUrl})`;
-      tile.style.backgroundPosition=`-${col*100}px -${row*100}px`;
+      tile.style.backgroundSize=`${gridSize*100}% ${gridSize*100}%`; // cover full image
+      tile.style.backgroundPosition=`${col*100/(gridSize-1)}% ${row*100/(gridSize-1)}%`;
       tile.dataset.correct=row*gridSize+col;
       tile.dataset.current=row*gridSize+col;
       tile.draggable=true;
       puzzle.appendChild(tile); tiles.push(tile);
     }
   }
+
+  // Shuffle & drag logic stays same...
+}
+
   // Shuffle
   for(let i=tiles.length-1;i>0;i--){
     let j=Math.floor(Math.random()*(i+1));
