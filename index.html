@@ -98,6 +98,38 @@
   h1, .input-boxes {
     transition: all 0.7s ease;
   }
+  #marqueeBanner {
+    position: fixed;
+    top: 30px;
+    left: 0;
+    right: 0;
+    background: #000;
+    color: white;
+    padding: 8px 0;
+    border-radius: 0;
+    overflow: hidden;
+    z-index: 9999;
+    display: none;
+    transition: opacity 0.3s ease;
+  }
+  #marqueeText {
+    display: flex;
+    white-space: nowrap;
+    animation: marqueeScroll 20s linear infinite;
+  }
+  #marqueeText span {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  @keyframes marqueeScroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
   .row { display: flex; justify-content: center; gap: 5px; }
   .key {
     flex: 1; height: 50px;
@@ -224,9 +256,13 @@
     font-weight: 600;
     white-space: nowrap;
     box-shadow: 0 4px 20px rgba(214, 0, 0, 0.3);
-    opacity: 0;
-    animation: hintFadeInOut 3s ease forwards;
+    display: none;
     pointer-events: none;
+    z-index: 1;
+  }
+  #playHint.show {
+    display: block;
+    animation: hintFadeInOut 3s ease forwards;
   }
   #playHint::after {
     content: '';
@@ -435,6 +471,11 @@ setTimeout(() => {
 </script>
 
 <div class="container" id="mainContainer" style="display:none;">
+  <div id="marqueeBanner">
+    <div id="marqueeText">
+      <span>PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨ PLEASE TYPE "YES" ✨</span>
+    </div>
+  </div>
   <h1>Will you be my Valentine?</h1>
   <div class="input-boxes">
     <div class="box" id="box1"></div>
@@ -506,10 +547,18 @@ setTimeout(() => {
           setTimeout(() => {
             loadingScreen.style.display = "none";
             document.getElementById("mainContainer").style.display = "flex";
+            document.getElementById("marqueeBanner").style.display = "block";
             
-            // Show music player
+            // Show music player with hint
             setTimeout(() => {
-              document.getElementById('musicPlayer').classList.add('show');
+              const musicPlayer = document.getElementById('musicPlayer');
+              musicPlayer.classList.add('show');
+              
+              // Show hint after player appears
+              setTimeout(() => {
+                const hint = document.getElementById('playHint');
+                hint.classList.add('show');
+              }, 400);
             }, 300);
           }, 800);
         }, 1500);
@@ -596,6 +645,7 @@ function updateBoxes() {
 function checkInput() {
   if (input.join("") === "YES") {
     document.getElementById('keyboard').classList.add("hidden");
+    document.getElementById('marqueeBanner').style.display = "none";
     document.getElementById('shortMessage').style.display = "block";
     document.getElementById('loading').style.display = "block";
     let c = 8;
