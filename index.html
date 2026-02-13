@@ -33,6 +33,25 @@
     opacity: 0; transition: 0.4s;
   }
   .show { opacity: 1; transform: scale(1.1); }
+  .heart {
+    position: absolute;
+    font-size: 30px;
+    animation: float-up 2s ease-out forwards;
+    pointer-events: none;
+  }
+  @keyframes float-up {
+    0% {
+      transform: translateY(0) scale(0);
+      opacity: 1;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-400px) scale(1.5);
+      opacity: 0;
+    }
+  }
   body {
     font-family: 'Montserrat', sans-serif;
     background: linear-gradient(135deg, #ffe6e6, #fff0f5);
@@ -41,12 +60,14 @@
   }
   .container {
     display: flex; flex-direction: column; align-items: center;
+    justify-content: center;
     width: 100%; max-width: 450px;
+    min-height: 100vh;
     transition: 1.5s ease;
   }
   h1 {
     font-family: 'Fredoka One', cursive;
-    color: #d60000; font-size: 2em;
+    color: #d60000; font-size: clamp(1.5em, 5vw, 2em);
     text-align: center; margin-bottom: 20px;
     overflow: hidden;
     white-space: nowrap;
@@ -59,17 +80,20 @@
   }
   .input-boxes { display: flex; gap: 10px; margin-bottom: 15px; }
   .box {
-    width: 60px; height: 60px;
+    width: clamp(50px, 15vw, 60px); 
+    height: clamp(50px, 15vw, 60px);
     border: 3px solid #d60000; border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 24px; font-weight: bold;
+    font-size: clamp(20px, 6vw, 24px); font-weight: bold;
     background: #fff; color: #fff;
   }
-  .keyboard { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-  .keyboard.hidden { opacity: 0; pointer-events: none; }
-  .container.centered {
-    justify-content: center;
-    height: 100vh;
+  .keyboard { display: flex; flex-direction: column; gap: 10px; width: 100%; transition: all 0.5s ease; }
+  .keyboard.hidden { 
+    opacity: 0; 
+    pointer-events: none; 
+    max-height: 0;
+    overflow: hidden;
+    margin: 0;
   }
   .row { display: flex; justify-content: center; gap: 5px; }
   .key {
@@ -83,30 +107,30 @@
   .key.highlight:hover { transform: scale(1.1); }
   .key.special { background: #ff6600; cursor: pointer; }
   .key.special:hover { transform: scale(1.1); }
-  #message { margin-top: 10px; font-size: 20px; color: #d60000; font-weight: 600; text-align: center; }
-  #shortMessage { margin-top: 10px; font-size: 16px; color: #333; text-align: center; display: none; }
-  #loading { font-size: 18px; margin-top: 10px; display: none; text-align: center; }
+  #message { margin-top: 10px; font-size: clamp(16px, 4.5vw, 20px); color: #d60000; font-weight: 600; text-align: center; }
+  #shortMessage { margin-top: 10px; font-size: clamp(14px, 4vw, 16px); color: #333; text-align: center; display: none; }
+  #loading { font-size: clamp(16px, 4vw, 18px); margin-top: 10px; display: none; text-align: center; }
   .dot { animation: blink 1s infinite; }
   .dot:nth-child(2) { animation-delay: 0.2s; }
   .dot:nth-child(3) { animation-delay: 0.4s; }
   @keyframes blink { 0%,50%,100% { opacity: 0; } 25%,75% { opacity: 1; } }
   #proceedBtn {
     margin-top: 20px; padding: 10px 20px;
-    font-size: 18px; background: #d60000; color: white;
+    font-size: clamp(16px, 4vw, 18px); background: #d60000; color: white;
     border: none; border-radius: 10px; cursor: pointer;
     display: none; transition: 0.2s;
   }
   #proceedBtn:hover { background: #ff1a1a; transform: scale(1.05); }
-  #puzzleContainer { display: none; flex-direction: column; align-items: center; }
-  #puzzleInstruction { margin-bottom: 10px; text-align: center; font-size: 16px; color: #333; }
+  #puzzleContainer { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+  #puzzleInstruction { margin-bottom: 10px; text-align: center; font-size: clamp(14px, 4vw, 16px); color: #333; }
   #puzzle {
-    display: grid; grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(3, 100px); gap: 5px;
+    display: grid; grid-template-columns: repeat(3, clamp(80px, 25vw, 100px));
+    grid-template-rows: repeat(3, clamp(80px, 25vw, 100px)); gap: 5px;
     margin-bottom: 20px;
   }
   .tile {
-    width: 100px; height: 100px;
-    background-size: 300px 300px; cursor: grab;
+    width: 100%; height: 100%;
+    background-size: 300% 300%; cursor: grab;
     border-radius: 8px; transition: all 0.6s ease;
     transform-style: preserve-3d;
   }
@@ -115,23 +139,46 @@
     display: none; justify-content: center; margin: 30px 0 20px;
   }
   #greyCard {
-    width: 300px; height: 300px;
-    background: #444;
+    width: clamp(250px, 80vw, 300px); 
+    height: clamp(250px, 80vw, 300px);
+    background: linear-gradient(135deg, #ffc0e0, #ffb3d9, #ff99cc);
     border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    box-shadow: 0 8px 20px rgba(255, 105, 180, 0.4);
     display: flex; align-items: center; justify-content: center;
-    color: white; font-size: 1.4em; font-weight: bold;
+    color: white; font-size: clamp(1.2em, 5vw, 1.4em); font-weight: bold;
     cursor: pointer; transition: all 0.6s ease;
+    position: relative;
+    overflow: hidden;
   }
-  #tapTextFinal { display: none; margin-top: 16px; color: #444; font-size: 17px; }
+  #greyCard::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    transform: rotate(45deg);
+    animation: shimmer 3s infinite;
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+  }
+  #tapTextFinal { display: none; margin-top: 16px; color: #d60000; font-size: clamp(15px, 4vw, 17px); font-weight: 600; }
   #shortMessageFinal {
     display: none; margin: 16px 0;
-    font-size: 18px; color: #d60000; font-weight: 600;
+    font-size: clamp(16px, 4vw, 18px); color: #d60000; font-weight: 600;
     text-align: center; max-width: 90%;
   }
   #nextAfterTap {
     display: none; padding: 12px 28px;
-    font-size: 18px; background: #d60000; color: white;
+    font-size: clamp(16px, 4vw, 18px); background: #d60000; color: white;
     border: none; border-radius: 12px; cursor: pointer;
   }
   #nextAfterTap:hover { background: #ff1a1a; transform: scale(1.05); }
@@ -195,16 +242,34 @@ setTimeout(() => {
     setTimeout(() => {
       count--;
       if (count > 0) {
-        countdownEl.innerText = "In " + count;
+        countdownEl.innerText = count;
         countdownEl.classList.add("show");
         pop.currentTime = 0; pop.play();
       } else {
         clearInterval(interval);
-        loadingScreen.style.opacity = "0";
+        
+        // Heart explosion
+        for (let i = 0; i < 30; i++) {
+          setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.top = '50%';
+            heart.style.animationDelay = Math.random() * 0.3 + 's';
+            loadingScreen.appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 2000);
+          }, i * 50);
+        }
+        
         setTimeout(() => {
-          loadingScreen.style.display = "none";
-          document.getElementById("mainContainer").style.display = "flex";
-        }, 800);
+          loadingScreen.style.opacity = "0";
+          setTimeout(() => {
+            loadingScreen.style.display = "none";
+            document.getElementById("mainContainer").style.display = "flex";
+          }, 800);
+        }, 1500);
       }
     }, 300);
   }, 1000);
@@ -283,7 +348,6 @@ function updateBoxes() {
 function checkInput() {
   if (input.join("") === "YES") {
     document.getElementById('keyboard').classList.add("hidden");
-    document.getElementById('mainContainer').classList.add("centered");
     document.getElementById('shortMessage').style.display = "block";
     document.getElementById('loading').style.display = "block";
     let c = 8;
