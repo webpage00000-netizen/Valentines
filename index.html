@@ -3014,7 +3014,7 @@ document.getElementById('greyCard').addEventListener('click', () => {
   card.style.background = 'linear-gradient(135deg, #ff6fa5, #d60000)';
   card.style.fontSize = '1.1em';
   card.style.padding = '20px';
-  card.innerHTML = "You've made it this far… now you get to choose what to open first. Click Next!";
+  card.innerHTML = "You've made it this far… Congratulations! Click Next to unlock more of our memories.";
   tapText.style.display = 'none';
 
   setTimeout(() => {
@@ -3250,38 +3250,15 @@ document.getElementById('closeMessenger').addEventListener('click', () => {
   const chatHead2 = document.getElementById('chatHead2');
   
   messengerModal.classList.remove('active');
+  messengerOpen = false;
   
   // Check which chat head was opened
   if (chatHead && chatHead.style.display === 'flex' && chatHead.style.opacity === '0.3') {
     chatHead.style.opacity = '1';
-  }
-  
-  if (chatHead2 && chatHead2.style.display === 'flex' && chatHead2.style.opacity === '0.3') {
-    chatHead2.style.opacity = '1';
     
-    // Show proceed button after closing second chat head
-    let proceed2Btn = document.getElementById('proceed2Btn');
-    if (!proceed2Btn) {
-      proceed2Btn = document.createElement('button');
-      proceed2Btn.id = 'proceed2Btn';
-      proceed2Btn.textContent = 'Proceed';
-      document.getElementById('slideshow2Buttons').appendChild(proceed2Btn);
-      
-      // Add click handler for proceed button
-      proceed2Btn.addEventListener('click', () => {
-        document.getElementById('polaroidSlideshow2Page').style.display = 'none';
-        showFinalValentineMessage();
-      });
-    }
-    proceed2Btn.style.display = 'inline-block';
-  }
-  
-  messengerOpen = false;
-  
-  // Show continue button after closing first messenger (old code for first slideshow)
-  if (chatHead && chatHead.style.display === 'flex') {
+    // Show continue button after closing first messenger
     let continueBtn = document.getElementById('continueBtn');
-    if (!continueBtn && document.getElementById('polaroidSlideshowPage').style.display === 'flex') {
+    if (!continueBtn) {
       continueBtn = document.createElement('button');
       continueBtn.id = 'continueBtn';
       continueBtn.innerHTML = 'Continue?';
@@ -3294,14 +3271,32 @@ document.getElementById('closeMessenger').addEventListener('click', () => {
         startCupGame();
       });
     }
-    if (continueBtn) {
-      continueBtn.style.display = 'flex';
-    }
+    continueBtn.style.display = 'flex';
   }
+  
+  if (chatHead2 && chatHead2.style.display === 'flex' && chatHead2.style.opacity === '0.3') {
+    chatHead2.style.opacity = '1';
+    
+    // Show proceed button after closing second chat head
+    setTimeout(() => {
+      let proceed2Btn = document.getElementById('proceed2Btn');
+      if (proceed2Btn) {
+        proceed2Btn.style.display = 'inline-block';
+      }
+    }, 100);
+  }
+});
+
+// Proceed 2 Button Handler
+document.getElementById('proceed2Btn').addEventListener('click', () => {
+  console.log('Proceed button clicked'); // Debug
+  document.getElementById('polaroidSlideshow2Page').style.display = 'none';
+  showFinalValentineMessage();
 });
 
 // Show Final Valentine's Message
 function showFinalValentineMessage() {
+  console.log('Showing final valentine message'); // Debug
   const finalPage = document.getElementById('finalValentinePage');
   const typewriter = document.getElementById('valentineTypewriter');
   
