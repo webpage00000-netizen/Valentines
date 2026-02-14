@@ -1452,6 +1452,251 @@
     max-width: 85%;
   }
 
+  /* Cup Game Page */
+  #cupGamePage {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ffe6e6, #fff0f5);
+    padding: 40px 20px;
+    position: relative;
+  }
+
+  #cupGamePage h1 {
+    font-family: 'Fredoka One', cursive;
+    color: #d60000;
+    font-size: clamp(1.8em, 6vw, 2.5em);
+    margin-bottom: 20px;
+    text-align: center;
+    animation: none;
+    width: auto;
+  }
+
+  #cupGameInstruction {
+    font-size: clamp(16px, 4vw, 20px);
+    color: #d60000;
+    font-weight: 600;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  #cupGameContainer {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    perspective: 1000px;
+  }
+
+  .cup-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.5s ease;
+    cursor: pointer;
+  }
+
+  .cup-wrapper[data-cup="1"] {
+    transform: scale(0.9);
+  }
+
+  .cup-wrapper[data-cup="2"] {
+    transform: scale(1.1);
+  }
+
+  .cup-wrapper[data-cup="3"] {
+    transform: scale(1);
+  }
+
+  .cup {
+    width: 120px;
+    height: 140px;
+    background: linear-gradient(135deg, #ff6fa5, #ff1a75);
+    border-radius: 20px 20px 60px 60px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(214, 0, 0, 0.3);
+    transition: all 0.6s ease;
+  }
+
+  .cup::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 30px;
+    background: linear-gradient(135deg, #ff6fa5, #ff1a75);
+    border-radius: 50%;
+    box-shadow: 0 5px 15px rgba(214, 0, 0, 0.3);
+  }
+
+  .cup-content {
+    font-size: 40px;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    z-index: 10;
+  }
+
+  .cup.closed .cup-content {
+    opacity: 0;
+  }
+
+  .cup.flipped {
+    transform: rotateX(180deg);
+  }
+
+  #pickArrow {
+    font-size: 30px;
+    color: #d60000;
+    font-weight: 700;
+    animation: bounce 1s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Shuffle Prompt */
+  #shufflePrompt {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+  }
+
+  #shufflePrompt.active {
+    display: flex;
+  }
+
+  #shufflePromptContent {
+    background: white;
+    padding: 40px 50px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+  }
+
+  #shufflePromptContent h2 {
+    font-family: 'Fredoka One', cursive;
+    color: #d60000;
+    font-size: 28px;
+    margin-bottom: 25px;
+  }
+
+  #shuffleOkBtn {
+    padding: 12px 40px;
+    font-size: 18px;
+    background: linear-gradient(135deg, #ff6fa5, #d60000);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(214, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  #shuffleOkBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(214, 0, 0, 0.4);
+  }
+
+  /* Final Flower Reveal */
+  #flowerReveal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #ffe6e6, #fff0f5);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  #flowerReveal.active {
+    display: flex;
+    opacity: 1;
+  }
+
+  #finalFlower {
+    font-size: 80px;
+    animation: growFlower 2s ease forwards;
+  }
+
+  @keyframes growFlower {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  #flowerMessage {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(2em, 6vw, 3em);
+    color: #d60000;
+    margin-top: 30px;
+    opacity: 0;
+    animation: fadeInMessage 1s ease 2s forwards;
+  }
+
+  @keyframes fadeInMessage {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    #cupGameContainer {
+      gap: 20px;
+    }
+
+    .cup {
+      width: 90px;
+      height: 110px;
+    }
+
+    .cup::before {
+      width: 75px;
+      height: 25px;
+    }
+
+    .cup-content {
+      font-size: 30px;
+    }
+
+    #finalFlower {
+      font-size: 60px;
+    }
+  }
+
 
 </style>
 </head>
@@ -1746,6 +1991,49 @@
   <div id="messengerContent">
     <div id="messengerMessage"></div>
   </div>
+</div>
+
+<!-- Cup Game Page -->
+<div id="cupGamePage">
+  <h1>Pick Your Flowers! 🌸</h1>
+  
+  <div id="cupGameInstruction">Watch carefully...</div>
+  
+  <div id="cupGameContainer">
+    <div class="cup-wrapper" data-cup="1">
+      <div class="cup">
+        <div class="cup-content">🌹</div>
+      </div>
+    </div>
+    <div class="cup-wrapper" data-cup="2">
+      <div class="cup">
+        <div class="cup-content">💐</div>
+      </div>
+    </div>
+    <div class="cup-wrapper" data-cup="3">
+      <div class="cup">
+        <div class="cup-content">🌺🌸🌼</div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="pickArrow" style="display: none;">
+    ☝️ Pick one
+  </div>
+</div>
+
+<!-- Shuffle Prompt Modal -->
+<div id="shufflePrompt">
+  <div id="shufflePromptContent">
+    <h2>Start shuffling?</h2>
+    <button id="shuffleOkBtn">OK</button>
+  </div>
+</div>
+
+<!-- Final Flower Reveal -->
+<div id="flowerReveal">
+  <div id="finalFlower"></div>
+  <div id="flowerMessage">Flowers for you! 💕</div>
 </div>
 
 <script>
@@ -2432,12 +2720,142 @@ document.getElementById('closeMessenger').addEventListener('click', () => {
     // Add click handler for continue button
     continueBtn.addEventListener('click', () => {
       document.getElementById('polaroidSlideshowPage').style.display = 'none';
-      document.getElementById('choicePage').style.display = 'flex';
-      document.getElementById('musicPlayer').classList.add('show');
+      document.getElementById('cupGamePage').style.display = 'flex';
+      startCupGame();
     });
   }
   continueBtn.style.display = 'flex';
 });
+
+// Cup Game Logic
+const cupFlowers = {
+  1: '🌹',
+  2: '💐',
+  3: '🌺🌸🌼'
+};
+
+let cupPositions = [1, 2, 3];
+let gameActive = false;
+
+function startCupGame() {
+  cupPositions = [1, 2, 3];
+  gameActive = false;
+  
+  // Reset cups and show contents
+  document.querySelectorAll('.cup').forEach(cup => {
+    cup.classList.remove('closed', 'flipped');
+  });
+  document.querySelectorAll('.cup-content').forEach(content => {
+    content.style.opacity = '1';
+  });
+  document.getElementById('cupGameInstruction').textContent = 'Watch carefully...';
+  document.getElementById('pickArrow').style.display = 'none';
+  
+  // Show contents for 3 seconds
+  setTimeout(() => {
+    // Close/hide contents
+    document.querySelectorAll('.cup').forEach(cup => {
+      cup.classList.add('closed');
+    });
+    
+    // Show shuffle prompt after closing
+    setTimeout(() => {
+      document.getElementById('shufflePrompt').classList.add('active');
+    }, 600);
+  }, 3000);
+}
+
+// Shuffle OK button
+document.getElementById('shuffleOkBtn').addEventListener('click', () => {
+  document.getElementById('shufflePrompt').classList.remove('active');
+  document.getElementById('cupGameInstruction').textContent = 'Shuffling...';
+  shuffleCups();
+});
+
+function shuffleCups() {
+  const wrappers = Array.from(document.querySelectorAll('.cup-wrapper'));
+  const container = document.getElementById('cupGameContainer');
+  
+  // Shuffle positions array
+  cupPositions = cupPositions.sort(() => Math.random() - 0.5);
+  
+  // Animate shuffle
+  wrappers.forEach((wrapper, index) => {
+    wrapper.style.transition = 'all 0.5s ease';
+    wrapper.style.transform = `translateX(${(Math.random() - 0.5) * 200}px) translateY(${(Math.random() - 0.5) * 100}px)`;
+  });
+  
+  setTimeout(() => {
+    // Rearrange DOM order
+    wrappers.forEach((wrapper, index) => {
+      wrapper.dataset.cup = cupPositions[index];
+      const cupContent = wrapper.querySelector('.cup-content');
+      cupContent.textContent = cupFlowers[cupPositions[index]];
+    });
+    
+    // Reset positions
+    wrappers.forEach(wrapper => {
+      wrapper.style.transform = '';
+    });
+    
+    setTimeout(() => {
+      // Show pick instruction
+      document.getElementById('cupGameInstruction').textContent = '';
+      document.getElementById('pickArrow').style.display = 'block';
+      gameActive = true;
+      
+      // Add click handlers
+      wrappers.forEach(wrapper => {
+        wrapper.onclick = () => {
+          if (gameActive) {
+            selectCup(wrapper);
+          }
+        };
+      });
+    }, 600);
+  }, 3000);
+}
+
+function selectCup(selectedWrapper) {
+  if (!gameActive) return;
+  
+  gameActive = false;
+  document.getElementById('pickArrow').style.display = 'none';
+  
+  const selectedCup = selectedWrapper.querySelector('.cup');
+  const selectedFlower = selectedWrapper.querySelector('.cup-content').textContent;
+  
+  // Remove other cups
+  document.querySelectorAll('.cup-wrapper').forEach(wrapper => {
+    if (wrapper !== selectedWrapper) {
+      wrapper.style.transition = 'all 0.8s ease';
+      wrapper.style.opacity = '0';
+      wrapper.style.transform = 'scale(0)';
+    }
+  });
+  
+  // Open selected cup
+  setTimeout(() => {
+    selectedCup.classList.remove('closed');
+    selectedWrapper.style.transform = 'scale(1.2)';
+    
+    // Wait 2 seconds then grow flower
+    setTimeout(() => {
+      // Hide cup game page
+      document.getElementById('cupGamePage').style.opacity = '0';
+      
+      setTimeout(() => {
+        document.getElementById('cupGamePage').style.display = 'none';
+        
+        // Show flower reveal
+        const flowerReveal = document.getElementById('flowerReveal');
+        const finalFlower = document.getElementById('finalFlower');
+        finalFlower.textContent = selectedFlower;
+        flowerReveal.classList.add('active');
+      }, 1000);
+    }, 2000);
+  }, 800);
+}
 
 // Gallery Page Logic
 let currentSlideIndex = 0;
