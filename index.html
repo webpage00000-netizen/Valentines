@@ -1388,6 +1388,7 @@
     align-items: center;
     justify-content: center;
     z-index: 10003;
+    padding: 20px;
   }
 
   #finalValentinePage.active {
@@ -1396,23 +1397,27 @@
 
   #valentineTypewriter {
     font-family: 'Playfair Display', 'Georgia', serif;
-    font-size: clamp(2.5em, 8vw, 5em);
+    font-size: clamp(2em, 7vw, 5em);
     font-weight: 700;
     color: #d60000;
     text-align: center;
-    overflow: hidden;
     border-right: 4px solid #d60000;
     white-space: nowrap;
-    margin: 0 auto;
     letter-spacing: 0.05em;
     animation: 
       typing 3.5s steps(40, end),
       blink-caret 0.75s step-end infinite;
+    max-width: 100%;
+    overflow: visible;
   }
 
   @keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
+    from { 
+      max-width: 0;
+    }
+    to { 
+      max-width: 100%;
+    }
   }
 
   @keyframes blink-caret {
@@ -1421,7 +1426,7 @@
   }
 
   #valentineHearts {
-    font-size: clamp(3em, 10vw, 6em);
+    font-size: clamp(2.5em, 8vw, 6em);
     margin-top: 30px;
     opacity: 0;
     animation: fadeInHearts 1s ease 3.5s forwards;
@@ -1435,6 +1440,31 @@
     100% {
       opacity: 1;
       transform: scale(1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    #valentineTypewriter {
+      font-size: clamp(1.5em, 6vw, 3em);
+      letter-spacing: 0.02em;
+      border-right-width: 3px;
+    }
+
+    #valentineHearts {
+      font-size: clamp(2em, 7vw, 4em);
+      margin-top: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #valentineTypewriter {
+      font-size: clamp(1.2em, 5.5vw, 2.5em);
+      letter-spacing: 0.01em;
+      border-right-width: 2px;
+    }
+
+    #valentineHearts {
+      font-size: clamp(1.8em, 6vw, 3em);
     }
   }
 
@@ -3014,7 +3044,7 @@ document.getElementById('greyCard').addEventListener('click', () => {
   card.style.background = 'linear-gradient(135deg, #ff6fa5, #d60000)';
   card.style.fontSize = '1.1em';
   card.style.padding = '20px';
-  card.innerHTML = "You've made it this far… Congratulations! Click Next to unlock more of our memories.";
+  card.innerHTML = "You've made it this far… now you get to choose what to open first. Click Next!";
   tapText.style.display = 'none';
 
   setTimeout(() => {
