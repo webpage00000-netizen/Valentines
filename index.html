@@ -1357,6 +1357,87 @@
     border: 3px solid white;
   }
 
+  #proceed2Btn {
+    padding: 12px 28px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #ff6fa5, #d60000);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(214, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  #proceed2Btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(214, 0, 0, 0.4);
+  }
+
+  /* Final Valentine's Page */
+  #finalValentinePage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #ffe6e6, #fff0f5);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10003;
+  }
+
+  #finalValentinePage.active {
+    display: flex;
+  }
+
+  #valentineTypewriter {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    font-size: clamp(2.5em, 8vw, 5em);
+    font-weight: 700;
+    color: #d60000;
+    text-align: center;
+    overflow: hidden;
+    border-right: 4px solid #d60000;
+    white-space: nowrap;
+    margin: 0 auto;
+    letter-spacing: 0.05em;
+    animation: 
+      typing 3.5s steps(40, end),
+      blink-caret 0.75s step-end infinite;
+  }
+
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+
+  @keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: #d60000; }
+  }
+
+  #valentineHearts {
+    font-size: clamp(3em, 10vw, 6em);
+    margin-top: 30px;
+    opacity: 0;
+    animation: fadeInHearts 1s ease 3.5s forwards;
+  }
+
+  @keyframes fadeInHearts {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
 
   /* Polaroid Slideshow Page */
   #polaroidSlideshowPage {
@@ -2480,6 +2561,9 @@
       </svg>
       Play Again
     </button>
+    <button id="proceed2Btn" style="display: none;">
+      Proceed
+    </button>
   </div>
   
   <!-- Chat Head 2 -->
@@ -2487,6 +2571,12 @@
     <div id="chatHead2Avatar">LC</div>
     <div id="chatHead2Badge">1</div>
   </div>
+</div>
+
+<!-- Final Valentine's Message Page -->
+<div id="finalValentinePage">
+  <div id="valentineTypewriter"></div>
+  <div id="valentineHearts">💕💕💕</div>
 </div>
 
 <script>
@@ -2924,7 +3014,7 @@ document.getElementById('greyCard').addEventListener('click', () => {
   card.style.background = 'linear-gradient(135deg, #ff6fa5, #d60000)';
   card.style.fontSize = '1.1em';
   card.style.padding = '20px';
-  card.innerHTML = "You've made it this far… Congratulations! Click Next to unlock more of our memories.";
+  card.innerHTML = "You've made it this far… now you get to choose what to open first. Click Next!";
   tapText.style.display = 'none';
 
   setTimeout(() => {
@@ -3157,28 +3247,85 @@ I love you`;
 document.getElementById('closeMessenger').addEventListener('click', () => {
   const messengerModal = document.getElementById('messengerModal');
   const chatHead = document.getElementById('chatHead');
+  const chatHead2 = document.getElementById('chatHead2');
   
   messengerModal.classList.remove('active');
-  chatHead.style.opacity = '1';
+  
+  // Check which chat head was opened
+  if (chatHead && chatHead.style.display === 'flex' && chatHead.style.opacity === '0.3') {
+    chatHead.style.opacity = '1';
+  }
+  
+  if (chatHead2 && chatHead2.style.display === 'flex' && chatHead2.style.opacity === '0.3') {
+    chatHead2.style.opacity = '1';
+    
+    // Show proceed button after closing second chat head
+    let proceed2Btn = document.getElementById('proceed2Btn');
+    if (!proceed2Btn) {
+      proceed2Btn = document.createElement('button');
+      proceed2Btn.id = 'proceed2Btn';
+      proceed2Btn.textContent = 'Proceed';
+      document.getElementById('slideshow2Buttons').appendChild(proceed2Btn);
+      
+      // Add click handler for proceed button
+      proceed2Btn.addEventListener('click', () => {
+        document.getElementById('polaroidSlideshow2Page').style.display = 'none';
+        showFinalValentineMessage();
+      });
+    }
+    proceed2Btn.style.display = 'inline-block';
+  }
+  
   messengerOpen = false;
   
-  // Show continue button after closing messenger
-  let continueBtn = document.getElementById('continueBtn');
-  if (!continueBtn) {
-    continueBtn = document.createElement('button');
-    continueBtn.id = 'continueBtn';
-    continueBtn.innerHTML = 'Continue?';
-    document.getElementById('slideshowButtons').appendChild(continueBtn);
-    
-    // Add click handler for continue button
-    continueBtn.addEventListener('click', () => {
-      document.getElementById('polaroidSlideshowPage').style.display = 'none';
-      document.getElementById('cupGamePage').style.display = 'flex';
-      startCupGame();
-    });
+  // Show continue button after closing first messenger (old code for first slideshow)
+  if (chatHead && chatHead.style.display === 'flex') {
+    let continueBtn = document.getElementById('continueBtn');
+    if (!continueBtn && document.getElementById('polaroidSlideshowPage').style.display === 'flex') {
+      continueBtn = document.createElement('button');
+      continueBtn.id = 'continueBtn';
+      continueBtn.innerHTML = 'Continue?';
+      document.getElementById('slideshowButtons').appendChild(continueBtn);
+      
+      // Add click handler for continue button
+      continueBtn.addEventListener('click', () => {
+        document.getElementById('polaroidSlideshowPage').style.display = 'none';
+        document.getElementById('cupGamePage').style.display = 'flex';
+        startCupGame();
+      });
+    }
+    if (continueBtn) {
+      continueBtn.style.display = 'flex';
+    }
   }
-  continueBtn.style.display = 'flex';
 });
+
+// Show Final Valentine's Message
+function showFinalValentineMessage() {
+  const finalPage = document.getElementById('finalValentinePage');
+  const typewriter = document.getElementById('valentineTypewriter');
+  
+  finalPage.classList.add('active');
+  
+  // Typewriter effect
+  const text = "HAPPY VALENTINE'S DAY";
+  let index = 0;
+  
+  typewriter.textContent = '';
+  
+  const typeInterval = setInterval(() => {
+    if (index < text.length) {
+      typewriter.textContent += text.charAt(index);
+      index++;
+    } else {
+      clearInterval(typeInterval);
+      // Remove blinking cursor after typing is done
+      setTimeout(() => {
+        typewriter.style.borderRight = 'none';
+      }, 500);
+    }
+  }, 100); // 100ms per character
+}
 
 // Cup Game Logic
 const cupFlowers = {
