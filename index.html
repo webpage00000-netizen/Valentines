@@ -1073,6 +1073,45 @@
       width: 95%;
       max-width: 95%;
     }
+
+    /* Polaroid Header Responsive */
+    #polaroidHeader {
+      padding: 10px 15px;
+      gap: 10px;
+    }
+
+    #closePolaroidPage {
+      width: 32px;
+      height: 32px;
+    }
+
+    #polaroidMusicPlayer {
+      gap: 8px;
+      padding: 6px 12px;
+      max-width: 100%;
+    }
+
+    #polaroidPlayPauseBtn {
+      width: 32px;
+      height: 32px;
+    }
+
+    #polaroidSongTitle {
+      font-size: 12px;
+    }
+
+    #polaroidSongArtist {
+      font-size: 10px;
+    }
+
+    #polaroidProgressBar {
+      width: 50px;
+      height: 4px;
+    }
+
+    #polaroidSlideshowPage h1 {
+      margin-top: 70px;
+    }
   }
 
   /* Polaroid Slideshow Page */
@@ -1543,10 +1582,12 @@
     opacity: 1;
     transition: opacity 0.5s ease;
     z-index: 10;
+    position: absolute;
   }
 
   .cup.closed .cup-content {
     opacity: 0;
+    visibility: hidden;
   }
 
   .cup.flipped {
@@ -2779,41 +2820,52 @@ function shuffleCups() {
   // Shuffle positions array
   cupPositions = cupPositions.sort(() => Math.random() - 0.5);
   
-  // Animate shuffle
-  wrappers.forEach((wrapper, index) => {
-    wrapper.style.transition = 'all 0.5s ease';
-    wrapper.style.transform = `translateX(${(Math.random() - 0.5) * 200}px) translateY(${(Math.random() - 0.5) * 100}px)`;
-  });
-  
-  setTimeout(() => {
-    // Rearrange DOM order
+  // Multiple shuffle animations for 5 seconds
+  let shuffleCount = 0;
+  const shuffleInterval = setInterval(() => {
     wrappers.forEach((wrapper, index) => {
-      wrapper.dataset.cup = cupPositions[index];
-      const cupContent = wrapper.querySelector('.cup-content');
-      cupContent.textContent = cupFlowers[cupPositions[index]];
+      wrapper.style.transition = 'all 0.3s ease';
+      const randomX = (Math.random() - 0.5) * 300;
+      const randomY = (Math.random() - 0.5) * 150;
+      const randomRotate = (Math.random() - 0.5) * 20;
+      wrapper.style.transform = `translateX(${randomX}px) translateY(${randomY}px) rotate(${randomRotate}deg)`;
     });
     
-    // Reset positions
-    wrappers.forEach(wrapper => {
-      wrapper.style.transform = '';
-    });
-    
-    setTimeout(() => {
-      // Show pick instruction
-      document.getElementById('cupGameInstruction').textContent = '';
-      document.getElementById('pickArrow').style.display = 'block';
-      gameActive = true;
+    shuffleCount++;
+    if (shuffleCount >= 10) { // 10 shuffle movements in 5 seconds
+      clearInterval(shuffleInterval);
       
-      // Add click handlers
-      wrappers.forEach(wrapper => {
-        wrapper.onclick = () => {
-          if (gameActive) {
-            selectCup(wrapper);
-          }
-        };
-      });
-    }, 600);
-  }, 3000);
+      // Final rearrangement
+      setTimeout(() => {
+        wrappers.forEach((wrapper, index) => {
+          wrapper.dataset.cup = cupPositions[index];
+          const cupContent = wrapper.querySelector('.cup-content');
+          cupContent.textContent = cupFlowers[cupPositions[index]];
+        });
+        
+        // Reset positions
+        wrappers.forEach(wrapper => {
+          wrapper.style.transform = '';
+        });
+        
+        setTimeout(() => {
+          // Show pick instruction
+          document.getElementById('cupGameInstruction').textContent = '';
+          document.getElementById('pickArrow').style.display = 'block';
+          gameActive = true;
+          
+          // Add click handlers
+          wrappers.forEach(wrapper => {
+            wrapper.onclick = () => {
+              if (gameActive) {
+                selectCup(wrapper);
+              }
+            };
+          });
+        }, 600);
+      }, 300);
+    }
+  }, 500); // Shuffle every 0.5 seconds
 }
 
 function selectCup(selectedWrapper) {
