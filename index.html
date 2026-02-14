@@ -156,20 +156,82 @@
     display: none; transition: 0.2s;
   }
   #proceedBtn:hover { background: #ff1a1a; transform: scale(1.05); }
-  #puzzleContainer { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
-  #puzzleInstruction { margin-bottom: 10px; text-align: center; font-size: clamp(14px, 4vw, 16px); color: #333; }
-  #puzzle {
-    display: grid; grid-template-columns: repeat(3, clamp(80px, 25vw, 100px));
-    grid-template-rows: repeat(3, clamp(80px, 25vw, 100px)); gap: 5px;
+  #puzzleContainer { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+  #puzzleInstruction { 
+    margin-bottom: 20px; 
+    text-align: center; 
+    font-size: clamp(14px, 4vw, 16px); 
+    color: #d60000;
+    font-weight: 600;
+  }
+  #cardGame {
+    display: grid; 
+    grid-template-columns: repeat(4, clamp(70px, 20vw, 90px));
+    grid-template-rows: repeat(3, clamp(100px, 25vw, 120px)); 
+    gap: 10px;
     margin-bottom: 20px;
+    perspective: 1000px;
   }
-  .tile {
-    width: 100%; height: 100%;
-    background-size: 300% 300%; cursor: grab;
-    border-radius: 8px; transition: all 0.6s ease;
+  .memory-card {
+    width: 100%; 
+    height: 100%;
+    position: relative;
     transform-style: preserve-3d;
+    transition: transform 0.6s;
+    cursor: pointer;
+    border-radius: 16px;
   }
-  .tile.dragging { opacity: 0.6; transform: scale(1.05); }
+  .memory-card.flipped {
+    transform: rotateY(180deg);
+  }
+  .memory-card.matched {
+    animation: matchPulse 0.6s ease;
+  }
+  @keyframes matchPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+  .card-face {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(32px, 8vw, 42px);
+    box-shadow: 0 6px 20px rgba(214, 0, 0, 0.25);
+  }
+  .card-front {
+    background: linear-gradient(135deg, #ff6fa5, #ff1a75);
+    position: relative;
+    overflow: hidden;
+  }
+  .card-front::before {
+    content: '💝';
+    position: absolute;
+    font-size: clamp(40px, 10vw, 50px);
+    opacity: 0.3;
+    animation: floatHeart 3s ease-in-out infinite;
+  }
+  @keyframes floatHeart {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+  }
+  .card-back {
+    background: white;
+    transform: rotateY(180deg);
+    border: 4px solid #ffd6e8;
+    position: relative;
+  }
+  .card-back::after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255, 182, 193, 0.1), rgba(255, 105, 180, 0.1));
+  }
   #mergedReveal {
     display: none; justify-content: center; margin: 30px 0 20px;
   }
@@ -1062,9 +1124,9 @@
 </div>
 
 <div id="puzzleContainer">
-  <h1>Complete the Puzzle!</h1>
-  <div id="puzzleInstruction">Drag pieces to solve.</div>
-  <div id="puzzle"></div>
+  <h1>Match the Hearts! 💕</h1>
+  <div id="puzzleInstruction">Find pairs to unlock our special moment ✨</div>
+  <div id="cardGame"></div>
   <div id="mergedReveal">
     <div id="greyCard">Tap me ♥</div>
   </div>
@@ -1462,101 +1524,171 @@ createRow("row3", rows.row3);
 document.getElementById('proceedBtn').onclick = () => {
   document.getElementById('mainContainer').style.display = "none";
   document.getElementById('puzzleContainer').style.display = "flex";
-  initPuzzle();
+  initCardGame();
 };
 
-// Puzzle logic
-const puzzle = document.getElementById('puzzle');
-const puzzleInstruction = document.getElementById('puzzleInstruction');
-const imageUrl = './IMAGES/22.jpg';
+// Card Matching Game - Valentine's Theme
+const cardEmojis = ['❤️', '💕', '💖', '💗', '💝', '💘'];
+let flippedCards = [];
+let matchedPairs = 0;
+let canFlip = true;
 
-function initPuzzle() {
-  puzzle.innerHTML = '';
-  for (let row = 0; row < 3; row++) {
-    for (let col = 0; col < 3; col++) {
-      const tile = document.createElement('div');
-      tile.classList.add('tile');
-      tile.style.backgroundImage = `url(${imageUrl})`;
-      tile.style.backgroundPosition = `-${col * 100}px -${row * 100}px`;
-      tile.draggable = true;
-      tile.dataset.correctPos = `-${col * 100}px -${row * 100}px`;
-      puzzle.appendChild(tile);
+function initCardGame() {
+  const cardGame = document.getElementById('cardGame');
+  const puzzleInstruction = document.getElementById('puzzleInstruction');
+  cardGame.innerHTML = '';
+  matchedPairs = 0;
+  flippedCards = [];
+  canFlip = true;
+  
+  // Create pairs and shuffle
+  const cards = [...cardEmojis, ...cardEmojis].sort(() => Math.random() - 0.5);
+  
+  cards.forEach((emoji, index) => {
+    const card = document.createElement('div');
+    card.classList.add('memory-card');
+    card.dataset.emoji = emoji;
+    card.dataset.index = index;
+    
+    card.innerHTML = `
+      <div class="card-face card-front"></div>
+      <div class="card-face card-back">${emoji}</div>
+    `;
+    
+    card.addEventListener('click', () => flipCard(card));
+    cardGame.appendChild(card);
+  });
+}
+
+function createHeartParticles(x, y) {
+  for (let i = 0; i < 8; i++) {
+    const heart = document.createElement('div');
+    heart.textContent = '💖';
+    heart.style.position = 'fixed';
+    heart.style.left = x + 'px';
+    heart.style.top = y + 'px';
+    heart.style.fontSize = '20px';
+    heart.style.pointerEvents = 'none';
+    heart.style.zIndex = '9999';
+    heart.style.animation = 'floatAway 1s ease-out forwards';
+    
+    const angle = (Math.PI * 2 * i) / 8;
+    const distance = 50 + Math.random() * 30;
+    heart.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+    heart.style.setProperty('--ty', Math.sin(angle) * distance - 50 + 'px');
+    
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 1000);
+  }
+}
+
+// Add keyframe animation for particles
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes floatAway {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--tx), var(--ty)) scale(0.5);
+      opacity: 0;
     }
   }
+`;
+document.head.appendChild(style);
 
-  // Shuffle
-  const tiles = Array.from(puzzle.children);
-  tiles.sort(() => Math.random() - 0.5);
-  tiles.forEach(t => puzzle.appendChild(t));
-
-  let dragged = null;
-  tiles.forEach(tile => {
-    tile.addEventListener('dragstart', () => {
-      dragged = tile;
-      tile.classList.add('dragging');
-    });
-    tile.addEventListener('dragend', () => tile.classList.remove('dragging'));
-    tile.addEventListener('dragover', e => e.preventDefault());
-    tile.addEventListener('drop', e => {
-      e.preventDefault();
-      if (dragged && dragged !== tile) {
-        const temp = dragged.style.backgroundPosition;
-        dragged.style.backgroundPosition = tile.style.backgroundPosition;
-        tile.style.backgroundPosition = temp;
-        setTimeout(checkPuzzle, 120);
-      }
-    });
-  });
-}
-
-function normalizePosition(pos) {
-  const matches = (pos || '').match(/-?\d+/g);
-  if (!matches || matches.length < 2) return null;
-  return `${matches[0]}px ${matches[1]}px`;
-}
-
-function checkPuzzle() {
-  const tiles = Array.from(puzzle.children);
-  let solved = true;
-
-  tiles.forEach((tile, i) => {
-    const col = i % 3;
-    const row = Math.floor(i / 3);
-    const expectedX = -col * 100;
-    const expectedY = -row * 100;
-    const expected = `${expectedX}px ${expectedY}px`;
-    const actual = normalizePosition(tile.style.backgroundPosition);
-
-    if (actual !== expected) solved = false;
-  });
-
-  if (solved) {
-    tiles.forEach((tile, i) => {
-      setTimeout(() => {
-        tile.style.transition = 'all 0.6s ease';
-        tile.style.transform = 'rotateY(180deg)';
-        tile.style.backgroundImage = 'none';
-        tile.style.backgroundColor = '#444';
-      }, i * 160 + 150);
-    });
-
-    setTimeout(() => {
-      puzzle.style.display = 'none';
-      puzzleInstruction.style.display = 'none';
-      document.getElementById('mergedReveal').style.display = 'flex';
-
-      const card = document.getElementById('greyCard');
-      card.style.opacity = '0';
-      card.style.transform = 'scale(0.75)';
-
-      setTimeout(() => {
-        card.style.transition = 'all 0.9s ease';
-        card.style.opacity = '1';
-        card.style.transform = 'scale(1)';
-        document.getElementById('tapTextFinal').style.display = 'block';
-      }, 150);
-    }, 3 * 160 + 1200);
+function flipCard(card) {
+  if (!canFlip || card.classList.contains('flipped') || card.classList.contains('matched')) {
+    return;
   }
+  
+  card.classList.add('flipped');
+  flippedCards.push(card);
+  
+  if (flippedCards.length === 2) {
+    canFlip = false;
+    checkMatch();
+  }
+}
+
+function checkMatch() {
+  const [card1, card2] = flippedCards;
+  const emoji1 = card1.dataset.emoji;
+  const emoji2 = card2.dataset.emoji;
+  
+  if (emoji1 === emoji2) {
+    // Match! Create heart particles
+    const rect1 = card1.getBoundingClientRect();
+    const rect2 = card2.getBoundingClientRect();
+    createHeartParticles(rect1.left + rect1.width / 2, rect1.top + rect1.height / 2);
+    createHeartParticles(rect2.left + rect2.width / 2, rect2.top + rect2.height / 2);
+    
+    card1.classList.add('matched');
+    card2.classList.add('matched');
+    matchedPairs++;
+    flippedCards = [];
+    canFlip = true;
+    
+    // Update instruction text with encouragement
+    const messages = [
+      "Great match! Keep going! 💕",
+      "You're doing amazing! ❤️",
+      "Perfect pair! Almost there! 💖",
+      "Wonderful! Just a few more! 💗",
+      "So close! You've got this! 💝",
+      "Last one! Finish strong! 💘"
+    ];
+    document.getElementById('puzzleInstruction').textContent = messages[matchedPairs - 1];
+    
+    if (matchedPairs === 6) {
+      // All pairs matched!
+      setTimeout(() => {
+        document.getElementById('puzzleInstruction').textContent = "Perfect! You found them all! 🎉💕";
+      }, 300);
+      setTimeout(showReveal, 1200);
+    }
+  } else {
+    // No match - flip back
+    setTimeout(() => {
+      card1.classList.remove('flipped');
+      card2.classList.remove('flipped');
+      flippedCards = [];
+      canFlip = true;
+    }, 1000);
+  }
+}
+
+function showReveal() {
+  const cardGame = document.getElementById('cardGame');
+  const puzzleInstruction = document.getElementById('puzzleInstruction');
+  
+  // Fade out all cards
+  const allCards = document.querySelectorAll('.memory-card');
+  allCards.forEach((card, i) => {
+    setTimeout(() => {
+      card.style.transition = 'all 0.6s ease';
+      card.style.transform = 'rotateY(180deg) scale(0)';
+      card.style.opacity = '0';
+    }, i * 100);
+  });
+  
+  setTimeout(() => {
+    cardGame.style.display = 'none';
+    puzzleInstruction.style.display = 'none';
+    document.getElementById('mergedReveal').style.display = 'flex';
+    
+    const card = document.getElementById('greyCard');
+    card.style.opacity = '0';
+    card.style.transform = 'scale(0.75)';
+    
+    setTimeout(() => {
+      card.style.transition = 'all 0.9s ease';
+      card.style.opacity = '1';
+      card.style.transform = 'scale(1)';
+      document.getElementById('tapTextFinal').style.display = 'block';
+    }, 150);
+  }, allCards.length * 100 + 600);
 }
 
 // Card tap
