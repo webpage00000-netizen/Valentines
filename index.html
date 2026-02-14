@@ -1064,7 +1064,281 @@
       width: 40px;
       height: 40px;
     }
+
+    #polaroid {
+      max-width: 90%;
+    }
+
+    #messengerModal {
+      width: 95%;
+      max-width: 95%;
+    }
   }
+
+  /* Polaroid Slideshow Page */
+  #polaroidSlideshowPage {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ffe6e6, #fff0f5);
+    padding: 40px 20px;
+    position: relative;
+  }
+
+  #polaroidSlideshowPage h1 {
+    font-family: 'Fredoka One', cursive;
+    color: #d60000;
+    font-size: clamp(1.8em, 6vw, 2.5em);
+    margin-bottom: 40px;
+    text-align: center;
+    width: auto;
+    animation: none;
+  }
+
+  #polaroidContainer {
+    perspective: 1000px;
+    margin-bottom: 40px;
+  }
+
+  #polaroid {
+    background: white;
+    padding: 20px 20px 60px 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    max-width: 400px;
+    width: 90vw;
+    transform: rotate(-2deg);
+    transition: all 0.8s ease;
+    animation: polaroidSlide 1s ease;
+  }
+
+  @keyframes polaroidSlide {
+    0% {
+      transform: translateX(-100vw) rotate(-10deg);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0) rotate(-2deg);
+      opacity: 1;
+    }
+  }
+
+  #polaroidPhoto {
+    width: 100%;
+    padding-bottom: 100%;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #f0f0f0;
+    margin-bottom: 15px;
+  }
+
+  #polaroidCaption {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+  }
+
+  #slideshowButtons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #playAgainBtn, #continueBtn {
+    padding: 12px 28px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #ff6fa5, #d60000);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(214, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  #playAgainBtn:hover, #continueBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(214, 0, 0, 0.4);
+  }
+
+  /* Chat Head */
+  #chatHead {
+    position: fixed;
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #ff6fa5, #d60000);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 6px 25px rgba(214, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    animation: bounceIn 0.6s ease;
+  }
+
+  @keyframes bounceIn {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  #chatHead:hover {
+    transform: scale(1.1);
+  }
+
+  #chatHeadBadge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff0000;
+    color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    border: 3px solid white;
+  }
+
+  /* Messenger Modal */
+  #messengerModal {
+    position: fixed;
+    bottom: -100%;
+    right: 20px;
+    width: 400px;
+    max-width: 90vw;
+    height: 600px;
+    max-height: 80vh;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    transition: bottom 0.4s ease;
+    z-index: 1001;
+  }
+
+  #messengerModal.active {
+    bottom: 20px;
+  }
+
+  #messengerHeader {
+    background: white;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 20px 20px 0 0;
+  }
+
+  #closeMessenger {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+  }
+
+  #closeMessenger:hover {
+    background: #e0e0e0;
+  }
+
+  #messengerInfo {
+    flex: 1;
+  }
+
+  #senderName {
+    font-weight: 700;
+    font-size: 16px;
+    color: #333;
+  }
+
+  #onlineStatus {
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  #greenDot {
+    width: 8px;
+    height: 8px;
+    background: #44b700;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  #callIcons {
+    display: flex;
+    gap: 8px;
+  }
+
+  .call-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    border: none;
+    cursor: not-allowed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+  }
+
+  .call-btn svg {
+    stroke: #666;
+  }
+
+  #messengerContent {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f8f9fa;
+  }
+
+  #messengerMessage {
+    background: #e4e6eb;
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #333;
+    white-space: pre-wrap;
+    max-width: 85%;
+  }
+
 
 </style>
 </head>
@@ -1267,6 +1541,68 @@
   
   <div id="letterPaper">
     <div id="letterMessage"></div>
+  </div>
+</div>
+
+<!-- Polaroid Slideshow Page -->
+<div id="polaroidSlideshowPage">
+  <h1>Our Favorite Moments 💕</h1>
+  
+  <div id="polaroidContainer">
+    <div id="polaroid">
+      <div id="polaroidPhoto"></div>
+      <div id="polaroidCaption">Memory 1</div>
+    </div>
+  </div>
+  
+  <div id="slideshowButtons">
+    <button id="playAgainBtn" style="display: none;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+      Play Again
+    </button>
+  </div>
+  
+  <!-- Chat Head -->
+  <div id="chatHead" style="display: none;">
+    <div id="chatHeadAvatar">LC</div>
+    <div id="chatHeadBadge">1</div>
+  </div>
+</div>
+
+<!-- Messenger-like Modal -->
+<div id="messengerModal">
+  <div id="messengerHeader">
+    <button id="closeMessenger">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+    <div id="messengerInfo">
+      <div id="senderName">Luis Emmanuel Cabalo</div>
+      <div id="onlineStatus">
+        <span id="greenDot"></span>
+        Active now
+      </div>
+    </div>
+    <div id="callIcons">
+      <button class="call-btn" disabled>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+      </button>
+      <button class="call-btn" disabled>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="23 7 16 12 23 17 23 7"/>
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  
+  <div id="messengerContent">
+    <div id="messengerMessage"></div>
   </div>
 </div>
 
@@ -1716,8 +2052,164 @@ document.getElementById('greyCard').addEventListener('click', () => {
 // Next button
 document.getElementById('nextAfterTap').onclick = () => {
   document.getElementById('puzzleContainer').style.display = "none";
-  document.getElementById('choicePage').style.display = "flex";
+  document.getElementById('polaroidSlideshowPage').style.display = "flex";
+  startPolaroidSlideshow();
 };
+
+// Polaroid Slideshow
+let currentPolaroidIndex = 0;
+let polaroidInterval = null;
+const polaroidImages = [
+  './IMAGES/1.jpg',
+  './IMAGES/2.jpg',
+  './IMAGES/3.jpg',
+  './IMAGES/4.jpg',
+  './IMAGES/5.jpg',
+  './IMAGES/6.jpg',
+  './IMAGES/7.jpg',
+  './IMAGES/8.jpg',
+  './IMAGES/9.jpg',
+  './IMAGES/10.jpg',
+  './IMAGES/11.jpg',
+  './IMAGES/12.jpg'
+]; // Only 12 photos for polaroid slideshow
+
+function startPolaroidSlideshow() {
+  currentPolaroidIndex = 0;
+  showPolaroid(currentPolaroidIndex);
+  
+  polaroidInterval = setInterval(() => {
+    currentPolaroidIndex++;
+    if (currentPolaroidIndex < polaroidImages.length) {
+      showPolaroid(currentPolaroidIndex);
+    } else {
+      // Slideshow ended
+      clearInterval(polaroidInterval);
+      polaroidInterval = null;
+      document.getElementById('playAgainBtn').style.display = 'flex';
+      
+      // Show chat head after 1 second with random position
+      setTimeout(() => {
+        positionChatHeadRandomly();
+        document.getElementById('chatHead').style.display = 'flex';
+      }, 1000);
+    }
+  }, 3000); // 3 seconds per photo
+}
+
+function positionChatHeadRandomly() {
+  const chatHead = document.getElementById('chatHead');
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
+  
+  // Define safe zones (avoid edges and ensure visibility)
+  const minX = 30;
+  const maxX = windowWidth - 100; // 70px width + 30px margin
+  const minY = 100; // Below header
+  const maxY = windowHeight - 150; // 70px height + margin, avoid buttons
+  
+  // Random position
+  const randomX = Math.floor(Math.random() * (maxX - minX)) + minX;
+  const randomY = Math.floor(Math.random() * (maxY - minY)) + minY;
+  
+  chatHead.style.left = randomX + 'px';
+  chatHead.style.top = randomY + 'px';
+}
+
+function showPolaroid(index) {
+  const polaroid = document.getElementById('polaroid');
+  const photo = document.getElementById('polaroidPhoto');
+  const caption = document.getElementById('polaroidCaption');
+  
+  // Slide out
+  polaroid.style.transform = 'translateX(100vw) rotate(10deg)';
+  polaroid.style.opacity = '0';
+  
+  setTimeout(() => {
+    // Update content
+    photo.style.backgroundImage = `url(${polaroidImages[index]})`;
+    caption.textContent = `Memory ${index + 1}`;
+    
+    // Slide in
+    setTimeout(() => {
+      polaroid.style.transform = 'translateX(0) rotate(-2deg)';
+      polaroid.style.opacity = '1';
+    }, 50);
+  }, 400);
+}
+
+// Play Again Button
+document.getElementById('playAgainBtn').addEventListener('click', () => {
+  document.getElementById('playAgainBtn').style.display = 'none';
+  document.getElementById('chatHead').style.display = 'none';
+  
+  // Hide continue button if it exists
+  const continueBtn = document.getElementById('continueBtn');
+  if (continueBtn) {
+    continueBtn.style.display = 'none';
+  }
+  
+  // Close messenger if open
+  document.getElementById('messengerModal').classList.remove('active');
+  messengerOpen = false;
+  
+  startPolaroidSlideshow();
+});
+
+// Chat Head Toggle
+let messengerOpen = false;
+document.getElementById('chatHead').addEventListener('click', () => {
+  const messengerModal = document.getElementById('messengerModal');
+  const chatHead = document.getElementById('chatHead');
+  
+  if (!messengerOpen) {
+    // Open messenger
+    messengerModal.classList.add('active');
+    chatHead.style.opacity = '0.3';
+    
+    // Load message from Letter 1
+    const message1 = `Happy Valentine's Day baby! I don't know how many times I've said that I'm so lucky to have you, and I'll keep saying it a thousand more times because it's really true. Thank you for always supporting me and for always rooting for me. I'm always here for you too, no matter what.
+
+I want you to see some of my favorite photos of us together. I love all the pictures we have, but these ones always make me remember the exact moments we shared and they make me smile every time hihi
+
+I love you`;
+    
+    document.getElementById('messengerMessage').textContent = message1;
+    messengerOpen = true;
+  } else {
+    // Close messenger
+    messengerModal.classList.remove('active');
+    chatHead.style.opacity = '1';
+    messengerOpen = false;
+  }
+});
+
+// Close Messenger Button
+document.getElementById('closeMessenger').addEventListener('click', () => {
+  const messengerModal = document.getElementById('messengerModal');
+  const chatHead = document.getElementById('chatHead');
+  
+  messengerModal.classList.remove('active');
+  chatHead.style.opacity = '1';
+  messengerOpen = false;
+  
+  // Show continue button after closing messenger
+  let continueBtn = document.getElementById('continueBtn');
+  if (!continueBtn) {
+    continueBtn = document.createElement('button');
+    continueBtn.id = 'continueBtn';
+    continueBtn.innerHTML = 'Continue?';
+    document.getElementById('slideshowButtons').appendChild(continueBtn);
+    
+    // Add click handler for continue button
+    continueBtn.addEventListener('click', () => {
+      document.getElementById('polaroidSlideshowPage').style.display = 'none';
+      document.getElementById('choicePage').style.display = 'flex';
+      document.getElementById('musicPlayer').classList.add('show');
+    });
+  }
+  continueBtn.style.display = 'flex';
+});
 
 // Gallery Page Logic
 let currentSlideIndex = 0;
