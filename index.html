@@ -1087,10 +1087,123 @@
     position: relative;
   }
 
+  #polaroidHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  #closePolaroidPage {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(214, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  #closePolaroidPage:hover {
+    background: rgba(214, 0, 0, 0.2);
+    transform: scale(1.1);
+  }
+
+  #closePolaroidPage svg {
+    stroke: #d60000;
+  }
+
+  #polaroidMusicPlayer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    padding: 8px 15px;
+    max-width: 400px;
+  }
+
+  #polaroidPlayPauseBtn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6fa5, #d60000);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(214, 0, 0, 0.3);
+  }
+
+  #polaroidPlayPauseBtn:hover {
+    transform: scale(1.1);
+  }
+
+  #polaroidSongInfo {
+    flex: 1;
+    min-width: 0;
+  }
+
+  #polaroidSongTitle {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #polaroidSongArtist {
+    font-size: 11px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #polaroidProgressBar {
+    width: 60px;
+    height: 5px;
+    background: rgba(214, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  #polaroidProgressFill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff6fa5, #d60000);
+    border-radius: 10px;
+    transition: width 0.1s linear;
+  }
+
   #polaroidSlideshowPage h1 {
     font-family: 'Fredoka One', cursive;
     color: #d60000;
     font-size: clamp(1.8em, 6vw, 2.5em);
+    margin-top: 80px;
     margin-bottom: 40px;
     text-align: center;
     width: auto;
@@ -1444,7 +1557,8 @@
   <div id="galleryHeader">
     <button id="backToChoice">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-        <path d="M19 12H5M12 19l-7-7 7-7"/>
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
       </svg>
     </button>
     <div id="galleryTitle">
@@ -1503,7 +1617,8 @@
   <div id="letterHeader">
     <button id="backToChoiceFromLetter">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-        <path d="M19 12H5M12 19l-7-7 7-7"/>
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
       </svg>
     </button>
     <div id="letterTitle">
@@ -1546,6 +1661,33 @@
 
 <!-- Polaroid Slideshow Page -->
 <div id="polaroidSlideshowPage">
+  <div id="polaroidHeader">
+    <button id="closePolaroidPage">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    
+    <div id="polaroidMusicPlayer">
+      <button id="polaroidPlayPauseBtn">
+        <svg id="polaroidPlayIcon" width="20" height="20" viewBox="0 0 24 24" fill="white">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+        <svg id="polaroidPauseIcon" width="20" height="20" viewBox="0 0 24 24" fill="white" style="display:none;">
+          <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+        </svg>
+      </button>
+      <div id="polaroidSongInfo">
+        <div id="polaroidSongTitle">Nothing</div>
+        <div id="polaroidSongArtist">Bruno Major</div>
+      </div>
+      <div id="polaroidProgressBar">
+        <div id="polaroidProgressFill"></div>
+      </div>
+    </div>
+  </div>
+  
   <h1>Our Favorite Moments 💕</h1>
   
   <div id="polaroidContainer">
@@ -2053,8 +2195,84 @@ document.getElementById('greyCard').addEventListener('click', () => {
 document.getElementById('nextAfterTap').onclick = () => {
   document.getElementById('puzzleContainer').style.display = "none";
   document.getElementById('polaroidSlideshowPage').style.display = "flex";
+  document.getElementById('musicPlayer').classList.remove('show'); // Hide bottom music player
+  updatePolaroidMusicPlayer();
   startPolaroidSlideshow();
 };
+
+// Polaroid Music Player Controls
+const polaroidPlayPauseBtn = document.getElementById('polaroidPlayPauseBtn');
+const polaroidPlayIcon = document.getElementById('polaroidPlayIcon');
+const polaroidPauseIcon = document.getElementById('polaroidPauseIcon');
+const polaroidProgressFill = document.getElementById('polaroidProgressFill');
+const polaroidProgressBar = document.getElementById('polaroidProgressBar');
+
+// Update polaroid music player to match main music state
+function updatePolaroidMusicPlayer() {
+  if (isPlaying) {
+    polaroidPlayIcon.style.display = 'none';
+    polaroidPauseIcon.style.display = 'block';
+  } else {
+    polaroidPlayIcon.style.display = 'block';
+    polaroidPauseIcon.style.display = 'none';
+  }
+}
+
+// Polaroid play/pause toggle
+polaroidPlayPauseBtn.addEventListener('click', () => {
+  if (isPlaying) {
+    bgMusic.pause();
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+    polaroidPlayIcon.style.display = 'block';
+    polaroidPauseIcon.style.display = 'none';
+    isPlaying = false;
+  } else {
+    bgMusic.play()
+      .then(() => {
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+        polaroidPlayIcon.style.display = 'none';
+        polaroidPauseIcon.style.display = 'block';
+        isPlaying = true;
+      })
+      .catch(err => console.error("❌ Play error:", err));
+  }
+});
+
+// Update polaroid progress bar
+bgMusic.addEventListener('timeupdate', () => {
+  if (bgMusic.duration) {
+    const progress = (bgMusic.currentTime / bgMusic.duration) * 100;
+    polaroidProgressFill.style.width = progress + '%';
+  }
+});
+
+// Click polaroid progress bar to seek
+polaroidProgressBar.addEventListener('click', (e) => {
+  const rect = polaroidProgressBar.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const percentage = clickX / rect.width;
+  bgMusic.currentTime = percentage * bgMusic.duration;
+});
+
+// Close polaroid page button
+document.getElementById('closePolaroidPage').addEventListener('click', () => {
+  document.getElementById('polaroidSlideshowPage').style.display = 'none';
+  document.getElementById('choicePage').style.display = 'flex';
+  document.getElementById('musicPlayer').classList.add('show');
+  
+  // Stop slideshow if running
+  if (polaroidInterval) {
+    clearInterval(polaroidInterval);
+    polaroidInterval = null;
+  }
+  
+  // Hide chat head and messenger
+  document.getElementById('chatHead').style.display = 'none';
+  document.getElementById('messengerModal').classList.remove('active');
+  messengerOpen = false;
+});
 
 // Polaroid Slideshow
 let currentPolaroidIndex = 0;
@@ -2088,11 +2306,11 @@ function startPolaroidSlideshow() {
       polaroidInterval = null;
       document.getElementById('playAgainBtn').style.display = 'flex';
       
-      // Show chat head after 1 second with random position
+      // Show chat head after 1.5 seconds with random position
       setTimeout(() => {
         positionChatHeadRandomly();
         document.getElementById('chatHead').style.display = 'flex';
-      }, 1000);
+      }, 1500);
     }
   }, 3000); // 3 seconds per photo
 }
@@ -2102,15 +2320,25 @@ function positionChatHeadRandomly() {
   const windowWidth = window.innerWidth;
   const windowHeight = window.innerHeight;
   
-  // Define safe zones (avoid edges and ensure visibility)
-  const minX = 30;
-  const maxX = windowWidth - 100; // 70px width + 30px margin
-  const minY = 100; // Below header
-  const maxY = windowHeight - 150; // 70px height + margin, avoid buttons
+  // Randomly choose left or right side
+  const isLeftSide = Math.random() < 0.5;
   
-  // Random position
-  const randomX = Math.floor(Math.random() * (maxX - minX)) + minX;
-  const randomY = Math.floor(Math.random() * (maxY - minY)) + minY;
+  // Define safe zones for sides
+  const minY = 100; // Below header
+  const maxY = windowHeight - 150; // Above buttons
+  
+  let randomX, randomY;
+  
+  if (isLeftSide) {
+    // Left side: 20px to 100px from left edge
+    randomX = Math.floor(Math.random() * 80) + 20;
+  } else {
+    // Right side: 20px to 100px from right edge
+    randomX = windowWidth - Math.floor(Math.random() * 80) - 90; // 70px width + 20px margin
+  }
+  
+  // Random Y position
+  randomY = Math.floor(Math.random() * (maxY - minY)) + minY;
   
   chatHead.style.left = randomX + 'px';
   chatHead.style.top = randomY + 'px';
