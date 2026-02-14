@@ -189,7 +189,7 @@
   }
   @keyframes matchPulse {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    50% { transform: scale(1.05); }
   }
   .card-face {
     width: 100%;
@@ -203,11 +203,11 @@
     align-items: center;
     justify-content: center;
     font-size: clamp(32px, 8vw, 42px);
-    box-shadow: 0 6px 20px rgba(214, 0, 0, 0.25);
+    box-shadow: 0 4px 15px rgba(214, 0, 0, 0.2);
   }
   .card-front {
     background: linear-gradient(135deg, #ff6fa5, #ff1a75);
-    position: relative;
+    position: absolute;
     overflow: hidden;
     transform: rotateY(0deg);
   }
@@ -226,7 +226,7 @@
     background: white;
     transform: rotateY(180deg);
     border: 4px solid #ffd6e8;
-    position: relative;
+    position: absolute;
   }
   .card-back::after {
     content: '';
